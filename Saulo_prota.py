@@ -1,17 +1,16 @@
 # Saulo_prota.py
 import pygame
+from personagem import Personagem
+
 
 LARGURA_TELA = 800
 CHAO_Y = 300
 
 
-class Saulo:
+class Saulo(Personagem):
 
     def __init__(self, x, y):
-        self.pos_x = x
-        self.pos_y = y
-        self.largura = 40
-        self.altura = 60
+        super().__init__(x, y)
         self.velocidade = 5
         self.vel_y = 1
         self.f_gravidade = 0.6
