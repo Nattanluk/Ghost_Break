@@ -1,6 +1,7 @@
 #game.py
 import pygame
 from Saulo_prota import Saulo
+from menu import Menu
 
 LARGURA = 800
 ALTURA = 400
@@ -9,14 +10,13 @@ ALTURA = 400
 class Jogo:
 
     def __init__(self):
-
         pygame.init()
         self.tela = pygame.display.set_mode((LARGURA, ALTURA))
         pygame.display.set_caption("Ghost_Break")
         self.clock = pygame.time.Clock()
         self.player = Saulo(100, 300)
 
-    def iniciar(self):
+    def loop_jogo(self):
 
         rodando = True
         while rodando:
@@ -41,3 +41,8 @@ class Jogo:
             pygame.display.update()
 
         pygame.quit()
+
+    def iniciar(self):
+
+        menu = Menu(self)
+        menu.executar()
