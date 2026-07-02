@@ -4,7 +4,7 @@ from personagem import Personagem
 
 
 LARGURA_TELA = 800
-CHAO_Y = 300
+CHAO_Y = 350
 
 
 class Saulo(Personagem):
@@ -32,8 +32,6 @@ class Saulo(Personagem):
                 tempo_pulo += 1
             self.pos_y -= self.f_gravidade
 
-            
-
 
         if self.pos_x < 0:
             self.pos_x = 0
@@ -56,15 +54,14 @@ class Saulo(Personagem):
         self.mover(teclas)
         self.gravidade()
 
-    def desenhar(self, tela):
-
+    def desenhar(self, tela, camera_x):
         pygame.draw.rect(
-            tela,
-            (255, 255, 0),
-            (
-                self.pos_x,
-                self.pos_y,
-                self.largura,
-                self.altura
-            )
+        tela,
+        (255, 255, 0),
+        (
+            self.pos_x - camera_x,
+            self.pos_y,
+            self.largura,
+            self.altura
         )
+    )
