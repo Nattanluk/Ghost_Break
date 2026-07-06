@@ -13,7 +13,7 @@ class Menu:
         largura, altura = self.tela.get_size()
 
         self.fundo = pygame.image.load(
-            "imagens/1000290558.png"
+            "imagens/img_capa.png"
         ).convert()
 
         self.fundo = pygame.transform.scale(
@@ -72,7 +72,7 @@ class Menu:
 
             self.tela.blit(self.fundo, (0, 0))
             sombra = pygame.Surface((800, 600), pygame.SRCALPHA)
-            sombra.fill((0, 0, 0, 180))
+            sombra.fill((0, 0, 0, 0))
             self.tela.blit(sombra, (0, 0))
 
             textos = [
@@ -115,7 +115,7 @@ class Menu:
 
             self.tela.blit(self.fundo, (0, 0))
             sombra = pygame.Surface((800, 600), pygame.SRCALPHA)
-            sombra.fill((0, 0, 0, 70))
+            sombra.fill((0, 0, 0, 0))
             self.tela.blit(sombra, (0, 0))
 
             self.desenhar_botao(
