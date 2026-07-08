@@ -72,7 +72,7 @@ class Menu:
 
             self.tela.blit(self.fundo, (0, 0))
             sombra = pygame.Surface((800, 600), pygame.SRCALPHA)
-            sombra.fill((0, 0, 0, 0))
+            sombra.fill((0, 0, 0, 10))
             self.tela.blit(sombra, (0, 0))
 
             textos = [

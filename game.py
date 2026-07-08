@@ -29,7 +29,7 @@ class Jogo:
 
             teclas = pygame.key.get_pressed()
             self.player.update(teclas)
-            self.camera_x = self.player.pos_x - 200
+            self.camera_x = max(0, self.player.pos_x - 200)
             self.tela.fill((30, 30, 30))
             pygame.draw.rect(
                 self.tela,
