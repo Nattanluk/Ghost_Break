@@ -1,4 +1,5 @@
 import pygame
+import math
 from personagem import Personagem
 from projetil import Projetil
 
@@ -9,8 +10,16 @@ CHAO_Y = 350
 
 class Saulo(Personagem):
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, spritecaminho, esquerda = False):
         super().__init__(x, y)
+        self.spritecaminho = spritecaminho
+
+        self.sprite = pygame.image.load(self.spritecaminho).convert_alpha()
+        self.sprite_direita = pygame.transform.scale(self.sprite, (64, 77))
+        self.sprite_esquerda = pygame.transform.flip(self.sprite_direita, True, False)
+        self.rect = self.sprite.get_rect()
+        self.esquerda = esquerda
+            
 
         # Movimento
         self.velocidade = 5
@@ -27,15 +36,22 @@ class Saulo(Personagem):
 
         self.direção = 1 
 
+        self.tempo_flutuar = 0  
+        self.velocidade_flutuar = 0.05  
+        self.amplitude_flutuar = 8  
+
     def mover_horizontal(self, teclas):
 
         if teclas[pygame.K_LEFT]:
             self.pos_x -= self.velocidade
             self.direcao = -1
+            self.esquerda = True
+            
 
         if teclas[pygame.K_RIGHT]:
             self.pos_x += self.velocidade
             self.direcao = 1
+            self.esquerda = False
 
         # Limites do mapa
         if self.pos_x < 0:
@@ -78,18 +94,15 @@ class Saulo(Personagem):
         self.mover_horizontal(teclas)
         self.aplicar_gravidade(plataformas)
 
-    def desenhar(self, tela, camera_x):
+        self.tempo_flutuar += self.velocidade_flutuar
 
-        pygame.draw.rect(
-            tela,
-            (255, 255, 0),
-            (
-                int(self.pos_x - camera_x),
-                int(self.pos_y),
-                self.largura,
-                self.altura
-            )
-        )
+    def desenhar(self, tela, camera_x):
+        deslocamento_y = math.sin(self.tempo_flutuar) * self.amplitude_flutuar
+        pos_y_final = self.pos_y - 25 + deslocamento_y
+        if self.esquerda:
+            tela.blit(self.sprite_esquerda, (self.pos_x - camera_x, pos_y_final))
+        else:
+            tela.blit(self.sprite_direita, (self.pos_x - camera_x, pos_y_final))
 
     def get_rect(self):
         return pygame.Rect(

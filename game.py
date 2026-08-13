@@ -15,7 +15,7 @@ class Jogo:
         self.tela = pygame.display.set_mode((LARGURA, ALTURA))
         pygame.display.set_caption("Ghost_Break")
         self.clock = pygame.time.Clock()
-        self.player = Saulo(100, 350)
+        self.player = Saulo(100, 350, "imagens/Saulinho.png")
         self.camera_x = 0
         self.chao_y = 410
         self.mapa = Mapa()
