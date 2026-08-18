@@ -17,10 +17,11 @@ class Saulo(Personagem):
         self.sprite = pygame.image.load(self.spritecaminho).convert_alpha()
         self.sprite_direita = pygame.transform.scale(self.sprite, (64, 77))
         self.sprite_esquerda = pygame.transform.flip(self.sprite_direita, True, False)
-        self.rect = self.sprite.get_rect()
         self.esquerda = esquerda
+        self.vida = 3
+        self.invulneravel = False
+        self.tempo_invulnerabilidade = 0
             
-
         # Movimento
         self.velocidade = 5
 
@@ -95,6 +96,11 @@ class Saulo(Personagem):
         self.aplicar_gravidade(plataformas)
 
         self.tempo_flutuar += self.velocidade_flutuar
+        if self.invulneravel:
+            self.tempo_invulnerabilidade -= 1
+
+        if self.tempo_invulnerabilidade <= 0:
+            self.invulneravel = False
 
     def desenhar(self, tela, camera_x):
         deslocamento_y = math.sin(self.tempo_flutuar) * self.amplitude_flutuar
@@ -118,3 +124,7 @@ class Saulo(Personagem):
             self.pos_y + self.altura // 2,
             self.direcao
         )
+
+    def colidir(self, inimigorect):
+        rect = self.rect
+        rect.pygame.colliderect(inimigorect)

@@ -6,12 +6,9 @@ class Inimigo:
 
         self.x = x
         self.y = y
-
         self.largura = 40
         self.altura = 60
-
         self.vida = 1
-
         self.vivo = True
 
     def desenhar(self, tela, camera_x):
