@@ -3,6 +3,8 @@ from Saulo_prota import Saulo
 from menu import Menu
 from mapa import Mapa
 from inimigo import Inimigo
+from gameover import GameOver
+
 
 LARGURA = 800
 ALTURA = 450
@@ -11,29 +13,69 @@ ALTURA = 450
 class Jogo:
 
     def __init__(self):
+
         pygame.init()
-        self.tela = pygame.display.set_mode((LARGURA, ALTURA))
+
+        self.tela = pygame.display.set_mode(
+            (LARGURA, ALTURA)
+        )
+
         pygame.display.set_caption("Ghost_Break")
+
         self.clock = pygame.time.Clock()
-        self.player = Saulo(100, 350, "imagens/Saulinho.png")
+        self.player = Saulo(
+            100,
+            350,
+            "imagens/Saulinho.png"
+        )
+
         self.camera_x = 0
         self.chao_y = 410
         self.mapa = Mapa()
         self.projeteis = []
-
         self.inimigos = [
             Inimigo(600, 350),
             Inimigo(1200, 350)
         ]
 
+    def reiniciar_jogo(self):
+
+        # Cria um novo jogador
+        # Isso faz a vida voltar ao valor inicial
+        self.player = Saulo(
+            100,
+            350,
+            "imagens/Saulinho.png"
+        )
+
+        # Remove os projéteis antigos
+        self.projeteis = []
+
+        # Cria os inimigos novamente
+        self.inimigos = [
+            Inimigo(600, 350),
+            Inimigo(1200, 350)
+        ]
+
+        # Cria o mapa novamente
+        # A chave também volta para o lugar
+        self.mapa = Mapa()
+
+        self.camera_x = 0
+
     def loop_jogo(self):
+
         rodando = True
 
         while rodando:
+
             self.clock.tick(60)
+
+            # EVENTOS
             for evento in pygame.event.get():
+
                 if evento.type == pygame.QUIT:
-                    rodando = False
+                    return "sair"
 
                 if evento.type == pygame.KEYDOWN:
 
@@ -45,9 +87,29 @@ class Jogo:
                             self.player.atirar()
                         )
 
+            # GAME OVER
             if self.player.vida <= 0:
-                print("Game Over")
-                rodando = False
+
+                print("ENTROU NO GAME OVER")
+                gameover = GameOver(self)
+                resultado = gameover.executar()
+
+                # ENTER
+                if resultado == "jogar":
+                    self.reiniciar_jogo()
+                    continue
+
+                # ESC
+                if resultado == "menu":
+
+                    return "menu"
+
+                # Fechar jogo
+                if resultado == "sair":
+
+                    return "sair"
+
+            # ATUALIZAÇÃO DO JOGADOR
 
             teclas = pygame.key.get_pressed()
 
@@ -56,11 +118,16 @@ class Jogo:
                 self.mapa.plataformas
             )
 
+ 
+            # PROJÉTEIS
             for projetil in self.projeteis:
                 projetil.mover()
 
-            for projetil in self.projeteis[:]:
 
+            # COLISÃO DOS PROJÉTEIS
+            # COM OS INIMIGOS
+  
+            for projetil in self.projeteis[:]:
                 for inimigo in self.inimigos:
 
                     if (
@@ -69,12 +136,20 @@ class Jogo:
                             inimigo.get_rect()
                         )
                     ):
+
                         inimigo.tomar_dano()
 
                         if projetil in self.projeteis:
-                            self.projeteis.remove(projetil)
+
+                            self.projeteis.remove(
+                                projetil
+                            )
 
                         break
+
+  
+            # COLISÃO DO JOGADOR
+            # COM OS INIMIGOS
 
             for inimigo in self.inimigos:
 
@@ -85,9 +160,13 @@ class Jogo:
                         inimigo.get_rect()
                     )
                 ):
+
                     self.player.vida -= 1
                     self.player.invulneravel = True
                     self.player.tempo_invulnerabilidade = 60
+
+
+            # PORTA
 
             if (
                 self.player.tem_chave
@@ -95,7 +174,11 @@ class Jogo:
                     self.mapa.porta.rect
                 )
             ):
+
                 print("Fase concluída!")
+
+  
+            # CHAVE
 
             if (
                 not self.mapa.chave.coletada
@@ -103,53 +186,71 @@ class Jogo:
                     self.mapa.chave.rect
                 )
             ):
+
                 self.mapa.chave.coletada = True
                 self.player.tem_chave = True
                 print("Chave coletada!")
+
+  
+            # CÂMERA
 
             self.camera_x = max(
                 0,
                 self.player.pos_x - 200
             )
 
-            self.tela.fill((30, 30, 30))
+ 
+            # DESENHO
 
+            self.tela.fill(
+                (30, 30, 30)
+            )
+
+            # Plataformas
             for plataforma in self.mapa.plataformas:
+
                 plataforma.desenhar(
                     self.tela,
                     self.camera_x
                 )
 
+            # Inimigos
             for inimigo in self.inimigos:
+
                 inimigo.desenhar(
                     self.tela,
                     self.camera_x
                 )
 
+            # Porta
             self.mapa.porta.desenhar(
                 self.tela,
                 self.camera_x
             )
 
+            # Chave
             self.mapa.chave.desenhar(
                 self.tela,
                 self.camera_x
             )
 
+            # Jogador
             self.player.desenhar(
                 self.tela,
                 self.camera_x
             )
 
+            # Projéteis
             for projetil in self.projeteis:
+
                 projetil.desenhar(
                     self.tela,
                     self.camera_x
                 )
 
-            pygame.display.update()
+            pygame.display.flip()
 
-        pygame.quit()
+        return "menu"
 
     def iniciar(self):
         menu = Menu(self)
