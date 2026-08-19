@@ -4,6 +4,7 @@ from menu import Menu
 from mapa import Mapa
 from inimigo import Inimigo
 from gameover import GameOver
+from fase_concluida import FaseConcluida
 
 
 LARGURA = 800
@@ -83,9 +84,11 @@ class Jogo:
                         self.player.pular()
 
                     if evento.key == pygame.K_s:
-                        self.projeteis.append(
-                            self.player.atirar()
-                        )
+
+                        projetil = self.player.atirar()
+
+                        if projetil is not None:
+                            self.projeteis.append(projetil)
 
             # GAME OVER
             if self.player.vida <= 0:
@@ -117,6 +120,11 @@ class Jogo:
                 teclas,
                 self.mapa.plataformas
             )
+            
+            # ATUALIZAÇÃO DOS INIMIGOS
+
+            for inimigo in self.inimigos:
+                inimigo.atualizar()
 
  
             # PROJÉTEIS
@@ -166,31 +174,65 @@ class Jogo:
                     self.player.tempo_invulnerabilidade = 60
 
 
-            # PORTA
+                # PORTA
 
             if (
-                self.player.tem_chave
-                and self.player.get_rect().colliderect(
-                    self.mapa.porta.rect
-                )
-            ):
+                    self.player.tem_chave
+                    and self.player.get_rect().colliderect(
+                        self.mapa.porta.rect
+                    )
+                ):
 
-                print("Fase concluída!")
+                    tela_fase = FaseConcluida(
+                        self.tela,
+                        self.clock
+                    )
 
-  
-            # CHAVE
+                    resultado = tela_fase.executar()
+
+                    if resultado == "sair":
+                        return "sair"
+
+                    if resultado == "menu":
+                        return "menu"
+
+                    if resultado == "proxima":
+                        self.reiniciar_jogo()
+                        return "menu"
+
+        
+                    # CHAVE
 
             if (
-                not self.mapa.chave.coletada
-                and self.player.get_rect().colliderect(
-                    self.mapa.chave.rect
-                )
-            ):
+                    not self.mapa.chave.coletada
+                    and self.player.get_rect().colliderect(
+                        self.mapa.chave.rect
+                    )
+                ):
 
-                self.mapa.chave.coletada = True
-                self.player.tem_chave = True
-                print("Chave coletada!")
+                    self.mapa.chave.coletada = True
+                    self.player.tem_chave = True
+                    print("Chave coletada!")
 
+
+            # PLASMAS
+
+            for plasma in self.mapa.plasmas:
+
+                if (
+                    not plasma.coletado
+                    and self.player.get_rect().colliderect(
+                        plasma.get_rect()
+                    )
+                ):
+
+                    plasma.coletado = True
+                    self.player.plasmas += 1
+
+                    print(
+                        "Plasma coletado!",
+                        self.player.plasmas
+                    )
   
             # CÂMERA
 
@@ -233,11 +275,37 @@ class Jogo:
                 self.tela,
                 self.camera_x
             )
+            
+            # Plasmas
+
+            for plasma in self.mapa.plasmas:
+
+                plasma.desenhar(
+                    self.tela,
+                    self.camera_x
+                )
 
             # Jogador
             self.player.desenhar(
                 self.tela,
                 self.camera_x
+            )
+
+            fonte = pygame.font.SysFont(
+                "Arial",
+                24,
+                bold=True
+            )
+
+            texto_plasma = fonte.render(
+                f"Plasma: {self.player.plasmas}",
+                True,
+                (0, 255, 255)
+            )
+
+            self.tela.blit(
+                texto_plasma,
+                (20, 20)
             )
 
             # Projéteis

@@ -221,6 +221,8 @@ class Menu:
                         evento.pos
                     ):
 
+                        self.jogo.reiniciar_jogo()
+
                         resultado = self.jogo.loop_jogo()
 
                         # Se o jogo pediu para fechar

@@ -101,7 +101,7 @@ Ele possui movimentação de plataforma, podendo andar para esquerda e direita e
 - Velocidade: normal
 - Ataque: uso de plasmas
 
-Para atacar, o jogador deve coletar 5 plasmas, que são consumidos a cada uso do ataque.
+Para atacar, o jogador deve coletar 3 plasmas, que são consumidos a cada uso do ataque.
 
 O personagem não possui habilidades especiais além dessas mecânicas básicas.
 
