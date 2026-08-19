@@ -4,7 +4,7 @@ from personagem import Personagem
 from projetil import Projetil
 
 LARGURA_TELA = 800
-LARGURA_MAPA = 3000
+LARGURA_MAPA = 5000
 CHAO_Y = 350
 
 
@@ -40,8 +40,6 @@ class Saulo(Personagem):
         self.tempo_flutuar = 0  
         self.velocidade_flutuar = 0.05  
         self.amplitude_flutuar = 8  
-        
-        self.plasmas = 0
 
     def mover_horizontal(self, teclas):
 
@@ -121,12 +119,6 @@ class Saulo(Personagem):
         )
 
     def atirar(self):
-
-        if self.plasmas < 3:
-            return None
-
-        self.plasmas -= 3
-
         return Projetil(
             self.pos_x + self.largura // 2,
             self.pos_y + self.altura // 2,
@@ -134,5 +126,5 @@ class Saulo(Personagem):
         )
 
     def colidir(self, inimigorect):
-        rect = self.get_rect()
-        return rect.colliderect(inimigorect)
+        rect = self.rect
+        rect.pygame.colliderect(inimigorect)
