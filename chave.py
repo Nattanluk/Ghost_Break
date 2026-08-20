@@ -1,3 +1,4 @@
+#chave.py
 import pygame
 
 class Chave:

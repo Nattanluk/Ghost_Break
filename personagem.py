@@ -1,5 +1,4 @@
 # Personagem.py
-
 class Personagem:
 
     def __init__(self, x, y):

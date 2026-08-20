@@ -1,3 +1,5 @@
+
+#menu.py
 import pygame
 import sys
 
@@ -220,6 +222,8 @@ class Menu:
                     if self.botao_play.collidepoint(
                         evento.pos
                     ):
+
+                        self.jogo.reiniciar_jogo()
 
                         resultado = self.jogo.loop_jogo()
 

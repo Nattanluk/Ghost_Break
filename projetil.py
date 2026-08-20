@@ -1,3 +1,4 @@
+#projetil.py
 import pygame
 
 class Projetil:
@@ -38,3 +39,4 @@ class Projetil:
             self.largura,
             self.altura
         )
+
