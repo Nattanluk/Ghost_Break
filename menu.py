@@ -31,28 +31,11 @@ class Menu:
         altura_botao = 60
 
         # Botão JOGAR
-        self.botao_play = pygame.Rect(
-            300,
-            340,
-            largura_botao,
-            altura_botao
-        )
-
+        self.botao_play = pygame.Rect(300, 340, largura_botao, altura_botao)
         # Botão CRÉDITOS
-        self.botao_creditos = pygame.Rect(
-            80,
-            340,
-            largura_botao,
-            altura_botao
-        )
-
+        self.botao_creditos = pygame.Rect(80, 340, largura_botao, altura_botao)
         # Botão SAIR
-        self.botao_sair = pygame.Rect(
-            520,
-            340,
-            largura_botao,
-            altura_botao
-        )
+        self.botao_sair = pygame.Rect(520, 340, largura_botao, altura_botao)
 
     def desenhar_botao(self, rect, texto):
 

@@ -18,46 +18,29 @@ class Jogo:
 
         pygame.init()
 
-        self.tela = pygame.display.set_mode(
-            (LARGURA, ALTURA)
-        )
+        self.tela = pygame.display.set_mode((LARGURA, ALTURA))
 
         pygame.display.set_caption("Ghost_Break")
 
         self.clock = pygame.time.Clock()
-        self.player = Saulo(
-            100,
-            350,
-            "imagens/Saulinho.png"
-        )
-
+        self.player = Saulo(100, 350,"imagens/Saulinho.png")
         self.camera_x = 0
         self.chao_y = 410
         self.mapa = Mapa()
         self.projeteis = []
-        self.inimigos = [
-            Inimigo(600, 350),
-            Inimigo(1200, 350)
-        ]
+        self.inimigos = [Inimigo(600, 350),Inimigo(1200, 350)]
 
     def reiniciar_jogo(self):
 
         # Cria um novo jogador
         # Isso faz a vida voltar ao valor inicial
-        self.player = Saulo(
-            100,
-            350,
-            "imagens/Saulinho.png"
-        )
+        self.player = Saulo(100, 350,"imagens/Saulinho.png")
 
         # Remove os projéteis antigos
         self.projeteis = []
 
         # Cria os inimigos novamente
-        self.inimigos = [
-            Inimigo(600, 350),
-            Inimigo(1200, 350)
-        ]
+        self.inimigos = [Inimigo(600, 350), Inimigo(1200, 350)]
 
         # Cria o mapa novamente
         # A chave também volta para o lugar
@@ -80,12 +63,10 @@ class Jogo:
                     return "sair"
 
                 if evento.type == pygame.KEYDOWN:
-
                     if evento.key == pygame.K_UP:
                         self.player.pular()
 
                     if evento.key == pygame.K_s:
-
                         projetil = self.player.atirar()
 
                         if projetil is not None:
@@ -105,16 +86,13 @@ class Jogo:
 
                 # ESC
                 if resultado == "menu":
-
                     return "menu"
 
                 # Fechar jogo
                 if resultado == "sair":
-
                     return "sair"
 
             # ATUALIZAÇÃO DO JOGADOR
-
             teclas = pygame.key.get_pressed()
 
             self.player.update(
@@ -123,7 +101,6 @@ class Jogo:
             )
             
             # ATUALIZAÇÃO DOS INIMIGOS
-
             for inimigo in self.inimigos:
                 inimigo.atualizar()
 
@@ -135,7 +112,6 @@ class Jogo:
 
             # COLISÃO DOS PROJÉTEIS
             # COM OS INIMIGOS
-  
             for projetil in self.projeteis[:]:
                 for inimigo in self.inimigos:
 
@@ -159,7 +135,6 @@ class Jogo:
   
             # COLISÃO DO JOGADOR
             # COM OS INIMIGOS
-
             for inimigo in self.inimigos:
 
                 if (
@@ -176,7 +151,6 @@ class Jogo:
 
 
                 # PORTA
-
             if (
                     self.player.tem_chave
                     and self.player.get_rect().colliderect(
@@ -190,7 +164,6 @@ class Jogo:
                     )
 
                     resultado = tela_fase.executar()
-
                     if resultado == "sair":
                         return "sair"
 
@@ -203,7 +176,6 @@ class Jogo:
 
         
                     # CHAVE
-
             if (
                     not self.mapa.chave.coletada
                     and self.player.get_rect().colliderect(
@@ -217,7 +189,6 @@ class Jogo:
 
 
             # PLASMAS
-
             for plasma in self.mapa.plasmas:
 
                 if (
@@ -236,15 +207,12 @@ class Jogo:
                     )
   
             # CÂMERA
-
             self.camera_x = max(
                 0,
                 self.player.pos_x - 200
             )
 
- 
             # DESENHO
-
             self.tela.fill(
                 (30, 30, 30)
             )
@@ -280,7 +248,6 @@ class Jogo:
             # Plasmas
 
             for plasma in self.mapa.plasmas:
-
                 plasma.desenhar(
                     self.tela,
                     self.camera_x
@@ -318,7 +285,6 @@ class Jogo:
                 )
 
             pygame.display.flip()
-
         return "menu"
 
     def iniciar(self):

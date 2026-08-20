@@ -5,94 +5,116 @@ class GameOver:
 
     def __init__(self, jogo):
 
-        # Guarda o jogo para usar a mesma tela
         self.jogo = jogo
+        self.tela = jogo.tela
+        self.fonte = pygame.font.SysFont("Arial",15)
+        largura, altura = self.tela.get_size()
 
-        self.fonte_titulo = pygame.font.SysFont(
-            "Arial",
-            60,
-            bold=True
+        # Imagem de fundo
+        self.fundo = pygame.image.load("imagens/1000323722.png").convert()
+
+        self.fundo = pygame.transform.scale(
+            self.fundo,
+            (largura, altura)
         )
 
-        self.fonte = pygame.font.SysFont(
-            "Arial",
-            24
+        # Tamanho dos botões
+        largura_botao = 150
+        altura_botao = 50
+
+        # Botão JOGAR NOVAMENTE
+        self.botao_jogar = pygame.Rect(140, 270, largura_botao, altura_botao)
+
+        # Botão MENU PRINCIPAL
+        self.botao_menu = pygame.Rect(500, 270, largura_botao, altura_botao)
+
+
+    def desenhar_botao(self, rect, texto):
+        mouse = pygame.mouse.get_pos()
+
+        # Mesmo efeito do menu
+        if rect.collidepoint(mouse):
+            cor = (120, 70, 255, 220)
+
+        else:
+            cor = (0, 0, 0, 170)
+
+        superficie = pygame.Surface(
+            (rect.width, rect.height),
+            pygame.SRCALPHA
+        )
+
+        pygame.draw.rect(
+            superficie,
+            cor,
+            superficie.get_rect(),
+            border_radius=15
+        )
+
+        # Borda branca
+        pygame.draw.rect(
+            superficie,
+            (255, 255, 255),
+            superficie.get_rect(),
+            2,
+            border_radius=15
+        )
+
+        self.tela.blit(
+            superficie,
+            rect.topleft
+        )
+
+        # Texto
+        texto_render = self.fonte.render(
+            texto,
+            True,
+            (255, 255, 255)
+        )
+
+        texto_rect = texto_render.get_rect(
+            center=rect.center
+        )
+
+        self.tela.blit(
+            texto_render,
+            texto_rect
         )
 
     def executar(self):
 
         while True:
 
-            # Fundo da tela
-            self.jogo.tela.fill((20, 20, 20))
-
-            # Título
-            titulo = self.fonte_titulo.render(
-                "GAME OVER",
-                True,
-                (255, 255, 255)
+            # FUNDO
+            self.tela.blit(
+                self.fundo,
+                (0, 0)
             )
 
-            # Opção para jogar novamente
-            jogar = self.fonte.render(
-                "ENTER - Jogar novamente",
-                True,
-                (255, 255, 255)
+            # BOTÕES
+            self.desenhar_botao(
+                self.botao_jogar,
+                "JOGAR NOVAMENTE"
             )
 
-            # Opção para voltar ao menu
-            menu = self.fonte.render(
-                "ESC - Menu principal",
-                True,
-                (255, 255, 255)
+            self.desenhar_botao(
+                self.botao_menu,
+                "MENU PRINCIPAL"
             )
 
-            # Desenha o título no centro
-            titulo_rect = titulo.get_rect(
-                center=(400, 120)
-            )
-
-            self.jogo.tela.blit(
-                titulo,
-                titulo_rect
-            )
-
-            # Desenha a opção de jogar
-            jogar_rect = jogar.get_rect(
-                center=(400, 220)
-            )
-
-            self.jogo.tela.blit(
-                jogar,
-                jogar_rect
-            )
-
-            # Desenha a opção de voltar ao menu
-            menu_rect = menu.get_rect(
-                center=(400, 270)
-            )
-
-            self.jogo.tela.blit(
-                menu,
-                menu_rect
-            )
-
-            pygame.display.flip()
-
-            # Verifica os eventos
+            # EVENTOS
             for evento in pygame.event.get():
-
                 if evento.type == pygame.QUIT:
                     return "sair"
-
-                if evento.type == pygame.KEYDOWN:
-
-                    # ENTER = jogar novamente
-                    if evento.key == pygame.K_RETURN:
+                
+                if evento.type == pygame.MOUSEBUTTONDOWN:
+                    # JOGAR NOVAMENTE
+                    if self.botao_jogar.collidepoint(evento.pos):
                         return "jogar"
 
-                    # ESC = voltar para o menu
-                    if evento.key == pygame.K_ESCAPE:
+                    # MENU PRINCIPAL
+                    elif self.botao_menu.collidepoint(evento.pos):
                         return "menu"
 
+            pygame.display.flip()
             self.jogo.clock.tick(60)
