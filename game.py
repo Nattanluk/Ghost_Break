@@ -30,6 +30,18 @@ class Jogo:
         self.projeteis = []
         self.inimigos = [Inimigo(600, 350),Inimigo(1200, 350)]
 
+        self.coracao_cheio = pygame.image.load(
+            "imagens/corações_1.png"
+        ).convert_alpha()
+
+        self.coracao_meio = pygame.image.load(
+            "imagens/corações_2.png"
+        ).convert_alpha()
+
+        self.coracao_vazio = pygame.image.load(
+            "imagens/corações_3.png"
+        ).convert_alpha()
+
     def reiniciar_jogo(self):
 
         # Cria um novo jogador
@@ -99,7 +111,12 @@ class Jogo:
                 teclas,
                 self.mapa.plataformas
             )
-            
+
+            # VERIFICA SE O JOGADOR CAIU NO BURACO
+            if self.player.pos_y > ALTURA + 50:
+
+                self.player.vida = 0
+
             # ATUALIZAÇÃO DOS INIMIGOS
             for inimigo in self.inimigos:
                 inimigo.atualizar()
@@ -276,6 +293,9 @@ class Jogo:
                 (20, 20)
             )
 
+            #vidas
+            self.desenhar_vidas()
+
             # Projéteis
             for projetil in self.projeteis:
 
@@ -290,3 +310,20 @@ class Jogo:
     def iniciar(self):
         menu = Menu(self)
         menu.executar()
+
+    def desenhar_vidas(self):
+
+        if self.player.vida == 3:
+            imagem = self.coracao_cheio
+
+        elif self.player.vida == 2:
+            imagem = self.coracao_meio
+
+        else:
+            imagem = self.coracao_vazio
+
+        # Coloca a barra de vidas no canto superior direito
+        x = LARGURA - imagem.get_width() - 20
+        y = 20
+
+        self.tela.blit(imagem, (x, y))
