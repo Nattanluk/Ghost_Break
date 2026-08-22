@@ -16,7 +16,7 @@ class Saulo(Personagem):
         self.spritecaminho = spritecaminho
 
         self.sprite = pygame.image.load(self.spritecaminho).convert_alpha()
-        self.sprite_direita = pygame.transform.scale(self.sprite, (64, 77))
+        self.sprite_direita = pygame.transform.scale(self.sprite, (69, 77))
         self.sprite_esquerda = pygame.transform.flip(self.sprite_direita, True, False)
         self.esquerda = esquerda
         self.vida = 3
@@ -40,7 +40,7 @@ class Saulo(Personagem):
 
         self.tempo_flutuar = 0  
         self.velocidade_flutuar = 0.05  
-        self.amplitude_flutuar = 8  
+        self.amplitude_flutuar = 3
         
         self.plasmas = 0
 
@@ -72,6 +72,10 @@ class Saulo(Personagem):
 
     def aplicar_gravidade(self, plataformas):
 
+        # Guarda a posição antes de aplicar a gravidade
+        pos_y_anterior = self.pos_y
+
+        # Aplica a gravidade
         self.vel_y += self.gravidade
         self.pos_y += self.vel_y
 
@@ -81,17 +85,26 @@ class Saulo(Personagem):
         # Colisão com as plataformas
         for plataforma in plataformas:
 
+            # Margens laterais da colisão
+            esquerda_saulo = self.pos_x + 5
+            direita_saulo = self.pos_x + self.largura - 10
+
+            # Parte inferior do Saulo
+            fundo_anterior = pos_y_anterior + self.altura
+            fundo_atual = self.pos_y + self.altura
+
+            # Verifica se Saulo atravessou o topo da plataforma
             if (
-                self.pos_x + self.largura > plataforma.rect.left
-                and self.pos_x < plataforma.rect.right
-                and self.pos_y + self.altura >= plataforma.rect.top
-                and self.pos_y + self.altura <= plataforma.rect.top + 15
+                direita_saulo > plataforma.rect_colisao.left
+                and esquerda_saulo < plataforma.rect_colisao.right
+                and fundo_anterior <= plataforma.rect_colisao.top
+                and fundo_atual >= plataforma.rect_colisao.top
                 and self.vel_y >= 0
             ):
-                self.pos_y = plataforma.rect.top - self.altura
+                self.pos_y = plataforma.rect_colisao.top - self.altura
                 self.vel_y = 0
                 self.no_chao = True
-
+                break
 
     def update(self, teclas, plataformas):
 
@@ -107,7 +120,7 @@ class Saulo(Personagem):
 
     def desenhar(self, tela, camera_x):
         deslocamento_y = math.sin(self.tempo_flutuar) * self.amplitude_flutuar
-        pos_y_final = self.pos_y - 25 + deslocamento_y
+        pos_y_final = self.pos_y - 13 + deslocamento_y
         if self.esquerda:
             tela.blit(self.sprite_esquerda, (self.pos_x - camera_x, pos_y_final))
         else:

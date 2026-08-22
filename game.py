@@ -17,8 +17,17 @@ class Jogo:
     def __init__(self):
 
         pygame.init()
-
+        
         self.tela = pygame.display.set_mode((LARGURA, ALTURA))
+        
+        self.fundo = pygame.image.load(
+            "imagens/fundo_nivel1.png"
+        ).convert()
+
+        self.fundo = pygame.transform.scale(
+            self.fundo,
+            (LARGURA, ALTURA)
+        )
 
         pygame.display.set_caption("Ghost_Break")
 
@@ -28,7 +37,7 @@ class Jogo:
         self.chao_y = 410
         self.mapa = Mapa()
         self.projeteis = []
-        self.inimigos = [Inimigo(600, 350),Inimigo(1200, 350)]
+        self.inimigos = [Inimigo(400, 350),Inimigo(1200, 350)]
 
         self.coracao_cheio = pygame.image.load(
             "imagens/corações_1.png"
@@ -41,6 +50,8 @@ class Jogo:
         self.coracao_vazio = pygame.image.load(
             "imagens/corações_3.png"
         ).convert_alpha()
+        
+        
         
         self.barra_plasma_0 = pygame.image.load(
             "imagens/nenhum_plasma.png"
@@ -58,6 +69,26 @@ class Jogo:
             "imagens/plasma_cheio.png"
         ).convert_alpha()
 
+
+        # Tamanho da barra de plasma
+        tamanho_barra = (120, 70)
+
+        self.barra_plasma_0 = pygame.transform.scale(
+            self.barra_plasma_0, tamanho_barra
+        )
+
+        self.barra_plasma_1 = pygame.transform.scale(
+            self.barra_plasma_1, tamanho_barra
+        )
+
+        self.barra_plasma_2 = pygame.transform.scale(
+            self.barra_plasma_2, tamanho_barra
+        )
+
+        self.barra_plasma_3 = pygame.transform.scale(
+            self.barra_plasma_3, tamanho_barra
+        )
+
     def reiniciar_jogo(self):
 
         # Cria um novo jogador
@@ -68,7 +99,7 @@ class Jogo:
         self.projeteis = []
 
         # Cria os inimigos novamente
-        self.inimigos = [Inimigo(600, 350), Inimigo(1200, 350)]
+        self.inimigos = [Inimigo(400, 350), Inimigo(1200, 350)]
 
         # Cria o mapa novamente
         # A chave também volta para o lugar
@@ -130,13 +161,13 @@ class Jogo:
 
             # VERIFICA SE O JOGADOR CAIU NO BURACO
             if self.player.pos_y > ALTURA + 50:
-
                 self.player.vida = 0
 
             # ATUALIZAÇÃO DOS INIMIGOS
             for inimigo in self.inimigos:
-                inimigo.atualizar()
-
+                inimigo.atualizar(
+                    self.mapa.plataformas
+    )
  
             # PROJÉTEIS
             for projetil in self.projeteis:
@@ -240,14 +271,14 @@ class Jogo:
                     )
   
             # CÂMERA
-            self.camera_x = max(
-                0,
-                self.player.pos_x - 200
-            )
+            posicao_camera_desejada = self.player.pos_x - 80
+            self.camera_x = max(0, min(posicao_camera_desejada, 3000 - LARGURA))
+
 
             # DESENHO
-            self.tela.fill(
-                (30, 30, 30)
+            self.tela.blit(
+                self.fundo,
+                (0, 0)
             )
 
             # Plataformas

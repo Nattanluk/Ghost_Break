@@ -19,29 +19,67 @@ class Inimigo:
 
         # Movimento
         self.velocidade = 2
-        self.direcao = 1
+        self.direcao = - 1
+        
+        # Física
+        self.vel_y = 0
+        self.gravidade = 0.5
+        self.no_chao = False        
 
         # Distância máxima que pode andar
         self.distancia_patrulha = 100
 
-    def atualizar(self):
+    def atualizar(self, plataformas):
 
-        if not self.vivo:
-            return
+            if not self.vivo:
+                return
 
-        self.x += self.velocidade * self.direcao
+            # -------------------------
+            # MOVIMENTO HORIZONTAL
+            # -------------------------
 
-        # Chegou no limite direito
-        if self.x >= self.x_inicial + self.distancia_patrulha:
+            self.x += self.velocidade * self.direcao
 
-            self.x = self.x_inicial + self.distancia_patrulha
-            self.direcao = -1
+            # Limite direito da patrulha
+            if self.x >= self.x_inicial + self.distancia_patrulha:
 
-        # Chegou no limite esquerdo
-        if self.x <= self.x_inicial - self.distancia_patrulha:
+                self.x = self.x_inicial + self.distancia_patrulha
+                self.direcao = -1
 
-            self.x = self.x_inicial - self.distancia_patrulha
-            self.direcao = 1
+            # Limite esquerdo da patrulha
+            if self.x <= self.x_inicial - self.distancia_patrulha:
+
+                self.x = self.x_inicial - self.distancia_patrulha
+                self.direcao = 1
+
+            # -------------------------
+            # GRAVIDADE
+            # -------------------------
+
+            self.vel_y += self.gravidade
+            self.y += self.vel_y
+
+            self.no_chao = False
+
+            # -------------------------
+            # COLISÃO COM PLATAFORMAS
+            # -------------------------
+
+            for plataforma in plataformas:
+
+                esquerda_inimigo = self.x + 5
+                direita_inimigo = self.x + self.largura - 5
+
+                if (
+                    direita_inimigo > plataforma.rect.left
+                    and esquerda_inimigo < plataforma.rect.right
+                    and self.y + self.altura >= plataforma.rect.top
+                    and self.y + self.altura <= plataforma.rect.top + 15
+                    and self.vel_y >= 0
+                ):
+                    self.y = plataforma.rect.top - self.altura
+                    self.vel_y = 0
+                    self.no_chao = True
 
     def desenhar(self, tela, camera_x):
 

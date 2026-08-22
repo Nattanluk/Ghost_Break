@@ -31,7 +31,7 @@ class Mapa:
             )
 
         # Quarto trecho
-        for x in range(140, 190):
+        for x in range(140, 180):
             self.plataformas.append(
                 Plataforma(x * 20, 410, 20, 40)
             )
@@ -50,14 +50,14 @@ class Mapa:
         )
 
         # Porta
-        self.porta = Porta(2850, 330)
+        self.porta = Porta(2935, 330)
 
         # Chave
-        self.chave = Chave(800, 370)
+        self.chave = Chave(900, 370)
 
         # Inimigos
         self.inimigos = [
-            Inimigo(600, 350),
+            Inimigo(400, 350),
             Inimigo(1200, 350)
         ]
 
