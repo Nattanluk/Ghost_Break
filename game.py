@@ -41,6 +41,22 @@ class Jogo:
         self.coracao_vazio = pygame.image.load(
             "imagens/corações_3.png"
         ).convert_alpha()
+        
+        self.barra_plasma_0 = pygame.image.load(
+            "imagens/nenhum_plasma.png"
+        ).convert_alpha()
+
+        self.barra_plasma_1 = pygame.image.load(
+            "imagens/plasma_pouco.png"
+        ).convert_alpha()
+
+        self.barra_plasma_2 = pygame.image.load(
+            "imagens/plasma_metade.png"
+        ).convert_alpha()
+
+        self.barra_plasma_3 = pygame.image.load(
+            "imagens/plasma_cheio.png"
+        ).convert_alpha()
 
     def reiniciar_jogo(self):
 
@@ -281,18 +297,10 @@ class Jogo:
                 24,
                 bold=True
             )
-
-            texto_plasma = fonte.render(
-                f"Plasma: {self.player.plasmas}",
-                True,
-                (0, 255, 255)
-            )
-
-            self.tela.blit(
-                texto_plasma,
-                (20, 20)
-            )
-
+            
+            # Barra de plasma
+            self.desenhar_barra_plasma()
+            
             #vidas
             self.desenhar_vidas()
 
@@ -327,3 +335,24 @@ class Jogo:
         y = 20
 
         self.tela.blit(imagem, (x, y))
+        
+    def desenhar_barra_plasma(self):
+
+        plasmas = self.player.plasmas
+
+        if plasmas == 0:
+            imagem = self.barra_plasma_0
+
+        elif plasmas == 1:
+            imagem = self.barra_plasma_1
+
+        elif plasmas == 2:
+            imagem = self.barra_plasma_2
+
+        else:
+            imagem = self.barra_plasma_3
+
+        self.tela.blit(
+            imagem,
+            (15, 20)
+        )
