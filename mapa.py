@@ -37,8 +37,9 @@ class Mapa:
             )
 
         # Plataformas suspensas
+
         self.plataformas.append(
-            Plataforma(300, 330, 120, 20)
+            Plataforma(300, 315, 120, 20)
         )
 
         self.plataformas.append(
@@ -46,14 +47,38 @@ class Mapa:
         )
 
         self.plataformas.append(
-            Plataforma(900, 230, 150, 20)
+            Plataforma(800, 230, 150, 20)
+        )
+
+        self.plataformas.append(
+            Plataforma(1150, 250, 120, 20)
+        )
+
+        self.plataformas.append(
+            Plataforma(1450, 320, 130, 20)
+        )
+
+        self.plataformas.append(
+            Plataforma(1750, 290, 150, 20)
+        )
+
+        self.plataformas.append(
+            Plataforma(2000, 200, 430, 20)
+        )
+        
+        self.plataformas.append(
+            Plataforma(2190, 105, 60, 12)
+        )
+
+        self.plataformas.append(
+            Plataforma(2650, 280, 90, 20)
         )
 
         # Porta
-        self.porta = Porta(2935, 330)
+        self.porta = Porta(2910, 330)
 
         # Chave
-        self.chave = Chave(900, 370)
+        self.chave = Chave(2205, 85)
 
         # Inimigos
         self.inimigos = [

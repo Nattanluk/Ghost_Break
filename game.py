@@ -35,9 +35,10 @@ class Jogo:
         self.player = Saulo(100, 350,"imagens/Saulinho.png")
         self.camera_x = 0
         self.chao_y = 410
+        self.mensagem_porta = False
         self.mapa = Mapa()
         self.projeteis = []
-        self.inimigos = [Inimigo(400, 350),Inimigo(1200, 350)]
+        self.inimigos = [Inimigo(400, 350),Inimigo(1200, 350), Inimigo(2200, 140)]
 
         self.coracao_cheio = pygame.image.load(
             "imagens/corações_1.png"
@@ -88,6 +89,8 @@ class Jogo:
         self.barra_plasma_3 = pygame.transform.scale(
             self.barra_plasma_3, tamanho_barra
         )
+        
+        
 
     def reiniciar_jogo(self):
 
@@ -99,7 +102,11 @@ class Jogo:
         self.projeteis = []
 
         # Cria os inimigos novamente
-        self.inimigos = [Inimigo(400, 350), Inimigo(1200, 350)]
+        self.inimigos = [
+            Inimigo(400, 350), 
+            Inimigo(1200, 350),
+            Inimigo(2200,  140)
+            ]
 
         # Cria o mapa novamente
         # A chave também volta para o lugar
@@ -214,13 +221,13 @@ class Jogo:
                     self.player.tempo_invulnerabilidade = 60
 
 
-                # PORTA
-            if (
-                    self.player.tem_chave
-                    and self.player.get_rect().colliderect(
-                        self.mapa.porta.rect
-                    )
-                ):
+            # PORTA
+            if self.player.get_rect().colliderect(
+                self.mapa.porta.rect
+            ):
+
+                # Se tiver a chave, conclui a fase
+                if self.player.tem_chave:
 
                     tela_fase = FaseConcluida(
                         self.tela,
@@ -228,6 +235,7 @@ class Jogo:
                     )
 
                     resultado = tela_fase.executar()
+
                     if resultado == "sair":
                         return "sair"
 
@@ -238,8 +246,17 @@ class Jogo:
                         self.reiniciar_jogo()
                         return "menu"
 
+                # Se não tiver a chave, mostra a mensagem
+                else:
+                    self.mensagem_porta = True
+
+            else:
+
+                # Saiu de perto da porta
+                self.mensagem_porta = False
+
         
-                    # CHAVE
+            # CHAVE
             if (
                     not self.mapa.chave.coletada
                     and self.player.get_rect().colliderect(
@@ -271,8 +288,24 @@ class Jogo:
                     )
   
             # CÂMERA
-            posicao_camera_desejada = self.player.pos_x - 80
-            self.camera_x = max(0, min(posicao_camera_desejada, 3000 - LARGURA))
+
+            # Mantém o Saulo mais para a esquerda da tela
+            posicao_camera_desejada = self.player.pos_x - 250
+
+            self.camera_x = max(
+                0,
+                min(posicao_camera_desejada, 3000 - LARGURA)
+            )
+
+            # Limites da câmera
+            limite_esquerdo = 0
+            limite_direito = 3000 - LARGURA
+
+            # Impede a câmera de sair dos limites do mapa
+            self.camera_x = max(
+                limite_esquerdo,
+                min(posicao_camera_desejada, limite_direito)
+            )
 
 
             # DESENHO
@@ -323,6 +356,9 @@ class Jogo:
                 self.camera_x
             )
 
+            # Mensagem da porta
+            self.desenhar_mensagem_porta()
+
             fonte = pygame.font.SysFont(
                 "Arial",
                 24,
@@ -345,6 +381,57 @@ class Jogo:
 
             pygame.display.flip()
         return "menu"
+    
+    def desenhar_mensagem_porta(self):
+
+        if not self.mensagem_porta:
+            return
+
+        fonte = pygame.font.SysFont(
+            "Arial",
+            22,
+            bold=True
+        )
+
+        texto = fonte.render(
+            "Você precisa da chave!",
+            True,
+            (255, 255, 255)
+        )
+
+        # Tamanho da caixa
+        largura_caixa = texto.get_width() + 40
+        altura_caixa = texto.get_height() + 20
+
+        # Centraliza a caixa na tela
+        x = (LARGURA - largura_caixa) // 2
+        y = ALTURA - altura_caixa - 20
+
+        # Fundo da caixa
+        pygame.draw.rect(
+            self.tela,
+            (15, 20, 30),
+            (x, y, largura_caixa, altura_caixa),
+            border_radius=8
+        )
+
+        # Borda
+        pygame.draw.rect(
+            self.tela,
+            (80, 180, 255),
+            (x, y, largura_caixa, altura_caixa),
+            2,
+            border_radius=8
+        )
+
+        # Texto
+        texto_x = x + (largura_caixa - texto.get_width()) // 2
+        texto_y = y + (altura_caixa - texto.get_height()) // 2
+
+        self.tela.blit(
+            texto,
+            (texto_x, texto_y)
+        )
 
     def iniciar(self):
         menu = Menu(self)

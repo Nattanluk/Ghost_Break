@@ -2,18 +2,20 @@
 import pygame
 
 class Porta:
+
     def __init__(self, x, y):
+
+        # Área de colisão
         self.rect = pygame.Rect(x, y, 50, 80)
-        
-    # Imagem da porta
+
+        # Sprite
         self.sprite = pygame.image.load(
             "imagens/porta_pixel_art.png"
         ).convert_alpha()
 
-        # Tamanho da imagem
         self.sprite = pygame.transform.scale(
             self.sprite,
-            (50, 80)
+            (100, 130)
         )
 
     def desenhar(self, tela, camera_x):
@@ -21,19 +23,8 @@ class Porta:
         tela.blit(
             self.sprite,
             (
-                self.rect.x - camera_x,
-                self.rect.y
+                self.rect.x - camera_x - 10,
+                self.rect.bottom - self.sprite.get_height()
             )
         )
 
-    def desenhar(self, tela, camera_x):
-        pygame.draw.rect(
-            tela,
-            (139, 69, 19),   # Marrom
-            (
-                self.rect.x - camera_x,
-                self.rect.y,
-                self.rect.width,
-                self.rect.height
-            )
-        )
