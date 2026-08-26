@@ -1,7 +1,6 @@
 #fase_concluida.py
 import pygame
 
-
 class FaseConcluida:
 
     def __init__(self, tela, clock):
@@ -21,32 +20,15 @@ class FaseConcluida:
         )
 
         # Mesmo tamanho dos botões do menu
-        largura_botao = 200
-        altura_botao = 60
+        largura_botao = 150
+        altura_botao = 50
 
         # Botão TENTAR NOVAMENTE
-        self.botao_tentar = pygame.Rect(
-            300,
-            220,
-            largura_botao,
-            altura_botao
-        )
-
+        self.botao_tentar = pygame.Rect(330,370,largura_botao,altura_botao)
         # Botão PRÓXIMO
-        self.botao_proximo = pygame.Rect(
-            300,
-            290,
-            largura_botao,
-            altura_botao
-        )
-
+        self.botao_proximo = pygame.Rect(550,370,largura_botao,altura_botao)
         # Botão MENU
-        self.botao_menu = pygame.Rect(
-            300,
-            360,
-            largura_botao,
-            altura_botao
-        )
+        self.botao_menu = pygame.Rect(110,370,largura_botao,altura_botao)
 
     def desenhar_botao(self, rect, texto):
 
@@ -108,30 +90,15 @@ class FaseConcluida:
         while True:
 
             # FUNDO
-
             self.tela.blit(
                 self.fundo,
                 (0, 0)
             )
-
-
-            texto = self.fonte.render(
-                "Você encontrou a saída da fase!",
-                True,
-                (255, 255, 255)
-            )
-
-            self.tela.blit(
-                texto,
-                texto.get_rect(
-                    center=(400, 165)
-                )
-            )
-
+           
             # BOTÕES
             self.desenhar_botao(
                 self.botao_tentar,
-                "TENTAR NOVAMENTE"
+                "REFAZER"
             )
 
             self.desenhar_botao(

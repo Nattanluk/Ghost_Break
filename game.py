@@ -11,13 +11,11 @@ from fase_concluida import FaseConcluida
 LARGURA = 800
 ALTURA = 450
 
-
 class Jogo:
 
     def __init__(self):
 
         pygame.init()
-        
         self.tela = pygame.display.set_mode((LARGURA, ALTURA))
         
         self.fundo = pygame.image.load(
@@ -51,8 +49,6 @@ class Jogo:
         self.coracao_vazio = pygame.image.load(
             "imagens/corações_3.png"
         ).convert_alpha()
-        
-        
         
         self.barra_plasma_0 = pygame.image.load(
             "imagens/nenhum_plasma.png"

@@ -2,6 +2,7 @@
 #menu.py
 import pygame
 import sys
+from fase_concluida import FaseConcluida #tirar
 
 
 class Menu:
@@ -14,17 +15,14 @@ class Menu:
         self.fonte_2 = pygame.font.SysFont("Arial", 24)
         self.fonte_creditos = pygame.font.SysFont("Arial", 24)
 
+        self.menu = FaseConcluida
+
         largura, altura = self.tela.get_size()
 
         # Imagem de fundo
-        self.fundo = pygame.image.load(
-            "imagens/img_capa.png"
-        ).convert()
+        self.fundo = pygame.image.load("imagens/img_capa.png").convert()
 
-        self.fundo = pygame.transform.scale(
-            self.fundo,
-            (largura, altura)
-        )
+        self.fundo = pygame.transform.scale(self.fundo,(largura, altura))
 
         # Tamanho dos botões
         largura_botao = 200
@@ -204,10 +202,9 @@ class Menu:
                     # JOGAR
                     if self.botao_play.collidepoint(
                         evento.pos
-                    ):
+                    ): 
 
                         self.jogo.reiniciar_jogo()
-
                         resultado = self.jogo.loop_jogo()
 
                         # Se o jogo pediu para fechar
