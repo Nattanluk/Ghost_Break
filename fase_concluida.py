@@ -24,11 +24,11 @@ class FaseConcluida:
         altura_botao = 50
 
         # Botão TENTAR NOVAMENTE
-        self.botao_tentar = pygame.Rect(330,370,largura_botao,altura_botao)
+        self.botao_tentar = pygame.Rect(340,370,largura_botao,altura_botao)
         # Botão PRÓXIMO
-        self.botao_proximo = pygame.Rect(550,370,largura_botao,altura_botao)
+        self.botao_proximo = pygame.Rect(520,370,largura_botao,altura_botao)
         # Botão MENU
-        self.botao_menu = pygame.Rect(110,370,largura_botao,altura_botao)
+        self.botao_menu = pygame.Rect(160,370,largura_botao,altura_botao)
 
     def desenhar_botao(self, rect, texto):
 
