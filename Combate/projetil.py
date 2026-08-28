@@ -16,9 +16,9 @@ class Projetil:
         self.frames = []
 
         nomes_imagens = [
-            "imagens/ChatGPT Image 27 de ago. de 2026, 09_33_44.png",
-            "imagens/ChatGPT Image 27 de ago. de 2026, 09_35_37.png",
-            "imagens/ChatGPT Image 27 de ago. de 2026, 09_32_19.png"
+            "imagens/projetil_1.png",
+            "imagens/projetil_3.png",
+            "imagens/projetil_2.png"
         ]
 
         for nome in nomes_imagens:
@@ -137,7 +137,7 @@ class BarraPlasma:
 
         tela.blit(
             imagem,
-            (15, 20)
+            (19, 5)
         )
         
 class GerenciadorProjeteis:

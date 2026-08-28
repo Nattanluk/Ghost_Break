@@ -36,7 +36,8 @@ class Criar_Plasmas:
             Plasma(800, 370),
             Plasma(1000, 190),
             Plasma(1200, 370),
-            Plasma(1350, 370)
+            Plasma(1350, 370),
+            Plasma(2200, 370)
         ]
 
         return plasmas
