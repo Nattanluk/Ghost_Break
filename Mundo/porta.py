@@ -28,3 +28,8 @@ class Porta:
             )
         )
 
+class Criar_Porta:
+
+    def criar(self):
+
+        return Porta(2910, 330)

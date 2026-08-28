@@ -21,3 +21,9 @@ class Chave:
                     self.rect.y
                 )
             )
+
+class Criar_Chave:
+
+    def criar(self):
+
+        return Chave(2205, 85)

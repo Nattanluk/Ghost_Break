@@ -26,3 +26,17 @@ class Plasma:
 
     def get_rect(self):
         return self.rect
+    
+class Criar_Plasmas:
+
+    def criar(self):
+
+        plasmas = [
+            Plasma(400, 370),
+            Plasma(800, 370),
+            Plasma(1000, 190),
+            Plasma(1200, 370),
+            Plasma(1350, 370)
+        ]
+
+        return plasmas

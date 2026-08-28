@@ -1,48 +1,61 @@
 #Saulo_prota.py
 import pygame
 import math
-from personagem import Personagem
-from projetil import Projetil
 
-LARGURA_TELA = 800
+from Jogador.personagem import Personagem
+from Combate.projetil import Projetil
+
+
 LARGURA_MAPA = 3000
-CHAO_Y = 350
 
 
 class Saulo(Personagem):
 
-    def __init__(self, x, y, spritecaminho, esquerda = False):
-        super().__init__(x, y)
-        self.spritecaminho = spritecaminho
+    def __init__(self, x, y, spritecaminho, esquerda=False):
 
-        self.sprite = pygame.image.load(self.spritecaminho).convert_alpha()
-        self.sprite_direita = pygame.transform.scale(self.sprite, (69, 77))
-        self.sprite_esquerda = pygame.transform.flip(self.sprite_direita, True, False)
+        super().__init__(x, y)
+
+        # Sprite
+        self.sprite = pygame.image.load(
+            spritecaminho
+        ).convert_alpha()
+
+        self.sprite_direita = pygame.transform.scale(
+            self.sprite,
+            (69, 77)
+        )
+
+        self.sprite_esquerda = pygame.transform.flip(
+            self.sprite_direita,
+            True,
+            False
+        )
+
         self.esquerda = esquerda
+
+        # Vida
         self.vida = 3
         self.invulneravel = False
         self.tempo_invulnerabilidade = 0
-            
+
         # Movimento
         self.velocidade = 5
+        self.direcao = 1
 
         # Física
         self.vel_y = 0
         self.gravidade = 0.5
         self.forca_pulo = -10
-
-        # Estado
         self.no_chao = True
 
+        # Estado
         self.tem_chave = False
-
-        self.direção = 1 
-
-        self.tempo_flutuar = 0  
-        self.velocidade_flutuar = 0.05  
-        self.amplitude_flutuar = 3
-        
         self.plasmas = 0
+
+        # Flutuação
+        self.tempo_flutuar = 0
+        self.velocidade_flutuar = 0.05
+        self.amplitude_flutuar = 3
 
     def mover_horizontal(self, teclas):
 
@@ -150,3 +163,39 @@ class Saulo(Personagem):
     def colidir(self, inimigorect):
         rect = self.get_rect()
         return rect.colliderect(inimigorect)
+
+
+class BarraVidas:
+
+    def __init__(self):
+
+        self.coracao_cheio = pygame.image.load(
+            "imagens/corações_1.png"
+        ).convert_alpha()
+
+        self.coracao_meio = pygame.image.load(
+            "imagens/corações_2.png"
+        ).convert_alpha()
+
+        self.coracao_vazio = pygame.image.load(
+            "imagens/corações_3.png"
+        ).convert_alpha()
+
+    def desenhar(self, tela, player):
+
+        if player.vida == 3:
+            imagem = self.coracao_cheio
+
+        elif player.vida == 2:
+            imagem = self.coracao_meio
+
+        else:
+            imagem = self.coracao_vazio
+
+        x = tela.get_width() - imagem.get_width() - 20
+        y = 20
+
+        tela.blit(
+            imagem,
+            (x, y)
+        )

@@ -4,7 +4,6 @@ import pygame
 from Mundo.plataformas import Criar_Plataforma
 from Mundo.porta import Criar_Porta
 from Mundo.chave import Criar_Chave
-
 from Combate.inimigo import Criar_Inimigos
 from Combate.plasma import Criar_Plasmas
 

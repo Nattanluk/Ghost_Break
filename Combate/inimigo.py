@@ -113,3 +113,15 @@ class Inimigo:
 
         if self.vida <= 0:
             self.vivo = False
+            
+class Criar_Inimigos:
+
+    def criar(self):
+
+        inimigos = [
+            Inimigo(400, 350),
+            Inimigo(1200, 350),
+            Inimigo(2200, 140)
+        ]
+
+        return inimigos
