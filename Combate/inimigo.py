@@ -1,6 +1,5 @@
-#inimigo.py
+# inimigo.py
 import pygame
-
 
 class Inimigo:
 
@@ -8,19 +7,14 @@ class Inimigo:
 
         self.x = x
         self.y = y
-
         self.x_inicial = x
-
-        self.largura = 40
-        self.altura = 60
-
+        self.largura = 50
+        self.altura = 70
         self.vida = 1
         self.vivo = True
-
         # Movimento
         self.velocidade = 2
         self.direcao = -1
-
         # Física
         self.vel_y = 0
         self.gravidade = 0.5
@@ -29,15 +23,33 @@ class Inimigo:
         # Distância máxima que pode andar
         self.distancia_patrulha = 190
 
+ 
+        # ANIMAÇÃO
+        self.imagens = [
+            pygame.image.load("imagens/1000326750.png").convert_alpha(),
+            pygame.image.load("imagens/1000326751.png").convert_alpha(),
+            pygame.image.load("imagens/1000326749.png").convert_alpha()
+        ]
+
+        # Ajusta o tamanho das imagens
+        for i in range(len(self.imagens)):
+            self.imagens[i] = pygame.transform.scale(
+                self.imagens[i],
+                (self.largura, self.altura)
+            )
+
+        self.frame = 0
+
+        # Quanto maior, mais devagar a animação
+        self.tempo_animacao = 0
+        self.velocidade_animacao = 15
+
     def atualizar(self, plataformas):
 
         if not self.vivo:
             return
 
-        # -------------------------
         # MOVIMENTO HORIZONTAL
-        # -------------------------
-
         self.x += self.velocidade * self.direcao
 
         # Limite direito da patrulha
@@ -52,19 +64,12 @@ class Inimigo:
             self.x = self.x_inicial - self.distancia_patrulha
             self.direcao = 1
 
-        # -------------------------
         # GRAVIDADE
-        # -------------------------
-
         self.vel_y += self.gravidade
         self.y += self.vel_y
-
         self.no_chao = False
 
-        # -------------------------
         # COLISÃO COM PLATAFORMAS
-        # -------------------------
-
         for plataforma in plataformas:
 
             esquerda_inimigo = self.x + 5
@@ -83,18 +88,35 @@ class Inimigo:
                 self.no_chao = True
                 break
 
+        # ANIMAÇÃO
+        self.tempo_animacao += 1
+
+        if self.tempo_animacao >= self.velocidade_animacao:
+            self.tempo_animacao = 0
+            self.frame += 1
+
+            if self.frame >= len(self.imagens):
+                self.frame = 0
+
     def desenhar(self, tela, camera_x):
 
         if self.vivo:
 
-            pygame.draw.rect(
-                tela,
-                (255, 0, 0),
+            imagem = self.imagens[self.frame]
+
+            # Vira a imagem dependendo da direção
+            if self.direcao == -1:
+                imagem = pygame.transform.flip(
+                    imagem,
+                    True,
+                    False
+                )
+
+            tela.blit(
+                imagem,
                 (
                     self.x - camera_x,
-                    self.y,
-                    self.largura,
-                    self.altura
+                    self.y
                 )
             )
 
@@ -113,7 +135,8 @@ class Inimigo:
 
         if self.vida <= 0:
             self.vivo = False
-            
+
+
 class Criar_Inimigos:
 
     def criar(self):
@@ -121,7 +144,7 @@ class Criar_Inimigos:
         inimigos = [
             Inimigo(400, 350),
             Inimigo(1200, 350),
-            Inimigo(2200, 140)
-        ]
+            Inimigo(2200, 140)]
 
         return inimigos
+
