@@ -19,6 +19,8 @@ class AtualizacaoJogo:
 
         self.atualizar_inimigos()
 
+        self.atualizar_plasmas()
+
         self.jogo.projeteis.atualizar()
 
         self.verificar_colisoes()
@@ -59,6 +61,14 @@ class AtualizacaoJogo:
             inimigo.atualizar(
                 self.jogo.mapa.plataformas
             )
+
+
+    def atualizar_plasmas(self):
+
+        for plasma in self.jogo.mapa.plasmas:
+
+            if not plasma.coletado:
+                plasma.atualizar()
 
 
     def verificar_colisoes(self):

@@ -11,15 +11,24 @@ LARGURA_MAPA = 3000
 
 class Saulo(Personagem):
 
-    def __init__(self, x, y, spritecaminho, esquerda=False):
+    def __init__(self, x, y, esquerda=False):
 
         super().__init__(x, y)
+        
+        self.sprite = pygame.image.load(
+            "imagens/Saulinho.png"
+        ).convert_alpha()
 
         # Sprite
         self.sprite = pygame.image.load(
-            spritecaminho
+            "imagens/Saulinho.png"
         ).convert_alpha()
 
+        self.sprite_dano = pygame.image.load(
+            "imagens/Saulinho_Dano.png"
+        ).convert_alpha()
+        
+        # Saulo normal
         self.sprite_direita = pygame.transform.scale(
             self.sprite,
             (69, 77)
@@ -27,6 +36,19 @@ class Saulo(Personagem):
 
         self.sprite_esquerda = pygame.transform.flip(
             self.sprite_direita,
+            True,
+            False
+        )
+
+
+        # Saulo recebendo dano
+        self.sprite_dano_direita = pygame.transform.scale(
+            self.sprite_dano,
+            (60, 68)
+        )
+
+        self.sprite_dano_esquerda = pygame.transform.flip(
+            self.sprite_dano_direita,
             True,
             False
         )
@@ -130,14 +152,40 @@ class Saulo(Personagem):
 
         if self.tempo_invulnerabilidade <= 0:
             self.invulneravel = False
+            
+            
 
     def desenhar(self, tela, camera_x):
-        deslocamento_y = math.sin(self.tempo_flutuar) * self.amplitude_flutuar
+
+        deslocamento_y = math.sin(
+            self.tempo_flutuar
+        ) * self.amplitude_flutuar
+
         pos_y_final = self.pos_y - 13 + deslocamento_y
-        if self.esquerda:
-            tela.blit(self.sprite_esquerda, (self.pos_x - camera_x, pos_y_final))
+
+        if self.invulneravel:
+
+            if self.esquerda:
+                imagem = self.sprite_dano_esquerda
+            else:
+                imagem = self.sprite_dano_direita
+
         else:
-            tela.blit(self.sprite_direita, (self.pos_x - camera_x, pos_y_final))
+
+            if self.esquerda:
+                imagem = self.sprite_esquerda
+            else:
+                imagem = self.sprite_direita
+
+        tela.blit(
+            imagem,
+            (
+                self.pos_x - camera_x,
+                pos_y_final
+            )
+        )
+            
+            
 
     def get_rect(self):
         return pygame.Rect(

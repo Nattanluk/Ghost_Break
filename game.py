@@ -20,28 +20,13 @@ class Jogo:
 
         pygame.init()
 
-        self.tela = pygame.display.set_mode(
-            (LARGURA, ALTURA)
-        )
-
-        self.fundo = pygame.image.load(
-            "imagens/fundo_nivel1.png"
-        ).convert()
-
-        self.fundo = pygame.transform.scale(
-            self.fundo,
-            (LARGURA, ALTURA)
-        )
+        self.tela = pygame.display.set_mode((LARGURA, ALTURA))
 
         pygame.display.set_caption("Ghost_Break")
 
         self.clock = pygame.time.Clock()
 
-        self.player = Saulo(
-            100,
-            350,
-            "imagens/Saulinho.png"
-        )
+        self.player = Saulo(100, 350)
 
         self.mensagem_porta = False
 
@@ -65,18 +50,14 @@ class Jogo:
     def reiniciar_jogo(self):
 
         # Cria um novo jogador
-        # Isso faz a vida voltar ao valor inicial
-        self.player = Saulo(
-            100,
-            350,
-            "imagens/Saulinho.png"
-        )
+        # A vida e os atributos voltam aos valores iniciais
+        self.player = Saulo(100, 350)
 
         # Remove os projéteis antigos
         self.projeteis = GerenciadorProjeteis()
 
         # Cria o mapa novamente
-        # A chave também volta para o lugar
+        # A chave, plasmas, inimigos etc. voltam às posições iniciais
         self.mapa = Mapa()
 
         # Reinicia a câmera

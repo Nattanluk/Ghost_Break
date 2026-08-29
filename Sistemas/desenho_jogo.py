@@ -1,4 +1,4 @@
-#desenho_jogo.py
+# desenho_jogo.py
 import pygame
 
 from configuracoes import *
@@ -11,10 +11,21 @@ class DesenhoJogo:
         self.jogo = jogo
         self.tela = jogo.tela
 
+        # Fonte da mensagem da porta
         self.fonte_mensagem = pygame.font.SysFont(
             "Arial",
             24,
             bold=True
+        )
+
+        # Fundo
+        self.fundo = pygame.image.load(
+            "imagens/fundo_nivel1.png"
+        ).convert()
+
+        self.fundo = pygame.transform.scale(
+            self.fundo,
+            (LARGURA, ALTURA)
         )
 
 
@@ -36,7 +47,7 @@ class DesenhoJogo:
     def desenhar_fundo(self):
 
         self.tela.blit(
-            self.jogo.fundo,
+            self.fundo,
             (0, 0)
         )
 
@@ -112,13 +123,19 @@ class DesenhoJogo:
         )
 
         # Texto
-        texto_x = x + (largura_caixa - mensagem.get_width()) // 2
-        texto_y = y + (altura_caixa - mensagem.get_height()) // 2
+        texto_x = x + (
+            largura_caixa - mensagem.get_width()
+        ) // 2
+
+        texto_y = y + (
+            altura_caixa - mensagem.get_height()
+        ) // 2
 
         self.tela.blit(
             mensagem,
             (texto_x, texto_y)
         )
+
 
     def desenhar_projeteis(self):
 
