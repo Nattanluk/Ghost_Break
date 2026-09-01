@@ -21,29 +21,18 @@ class Jogo:
         pygame.init()
 
         self.tela = pygame.display.set_mode((LARGURA, ALTURA))
-
         pygame.display.set_caption("Ghost_Break")
 
         self.clock = pygame.time.Clock()
-
         self.player = Saulo(100, 350)
-
         self.mensagem_porta = False
-
         self.mapa = Mapa()
-
         self.camera = Camera(LARGURA_MAPA)
-
         self.projeteis = GerenciadorProjeteis()
-
         self.colisao = Colisao()
-
         self.barra_plasma = BarraPlasma()
-
-        self.barra_vidas = BarraVidas()
-        
-        self.desenho = DesenhoJogo(self)
-        
+        self.barra_vidas = BarraVidas()      
+        self.desenho = DesenhoJogo(self)       
         self.atualizacao = AtualizacaoJogo(self)
 
 

@@ -14,17 +14,11 @@ class AtualizacaoJogo:
     def atualizar(self):
 
         self.atualizar_jogador()
-
         self.verificar_queda()
-
         self.atualizar_inimigos()
-
         self.atualizar_plasmas()
-
         self.jogo.projeteis.atualizar()
-
         self.verificar_colisoes()
-
         resultado = self.jogo.verificar_porta()
 
         if resultado is not None:

@@ -14,22 +14,11 @@ class Menu:
         self.tela = jogo.tela
         self.fonte_1 = pygame.font.SysFont("Arial", 40, bold= True)
         self.fonte_2 = pygame.font.SysFont("Arial", 24)
-        self.fonte_titulo_creditos = pygame.font.SysFont(
-            "Arial",
-            42,
-            bold=True
-        )
+        self.fonte_titulo_creditos = pygame.font.SysFont("Arial",42,bold=True)
 
-        self.fonte_creditos = pygame.font.SysFont(
-            "Arial",
-            24
-        )
+        self.fonte_creditos = pygame.font.SysFont("Arial",24)
 
-        self.fonte_destaque = pygame.font.SysFont(
-            "Arial",
-            28,
-            bold=True
-        )
+        self.fonte_destaque = pygame.font.SysFont("Arial",28,bold=True)
 
         self.menu = FaseConcluida
 
@@ -127,10 +116,7 @@ class Menu:
                 (0, 0)
             )
 
-            # =========================
             # TÍTULO
-            # =========================
-
             titulo = self.fonte_titulo_creditos.render(
                 "CRÉDITOS",
                 True,
@@ -144,10 +130,8 @@ class Menu:
                 )
             )
 
-            # =========================
-            # INFORMAÇÕES
-            # =========================
 
+            # INFORMAÇÕES
             textos = [
 
                 ("GHOST BREAK", "titulo", 145),
@@ -191,10 +175,7 @@ class Menu:
                     )
                 )
 
-            # =========================
             # VOLTAR
-            # =========================
-
             voltar = self.fonte_creditos.render(
                 "Pressione qualquer tecla para voltar",
                 True,
@@ -208,10 +189,7 @@ class Menu:
                 )
             )
 
-            # =========================
             # EVENTOS
-            # =========================
-
             for evento in pygame.event.get():
 
                 if evento.type == pygame.QUIT:
@@ -311,5 +289,4 @@ class Menu:
                         sys.exit()
 
             pygame.display.flip()
-
             self.jogo.clock.tick(60)

@@ -96,20 +96,11 @@ class FaseConcluida:
             )
            
             # BOTÕES
-            self.desenhar_botao(
-                self.botao_tentar,
-                "REFAZER"
-            )
+            self.desenhar_botao(self.botao_tentar,"REFAZER")
 
-            self.desenhar_botao(
-                self.botao_proximo,
-                "PRÓXIMO"
-            )
+            self.desenhar_botao(self.botao_proximo,"PRÓXIMO")
 
-            self.desenhar_botao(
-                self.botao_menu,
-                "MENU"
-            )
+            self.desenhar_botao(self.botao_menu,"MENU")
 
 
             # EVENTOS
