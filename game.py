@@ -29,10 +29,21 @@ class Jogo:
         self.mapa = Mapa()
         self.camera = Camera(LARGURA_MAPA)
         self.projeteis = GerenciadorProjeteis()
-        self.colisao = Colisao()
+
+        # Sistema de colisão
+        self.colisao = Colisao(self)
+
         self.barra_plasma = BarraPlasma()
-        self.barra_vidas = BarraVidas()      
-        self.desenho = DesenhoJogo(self)       
+        self.barra_vidas = BarraVidas()
+
+        # SCORE
+        self.inimigos_derrotados = 0
+        self.score = 0
+
+        # TEMPO DA FASE
+        self.tempo_inicio = pygame.time.get_ticks()
+
+        self.desenho = DesenhoJogo(self)
         self.atualizacao = AtualizacaoJogo(self)
 
 
@@ -51,6 +62,13 @@ class Jogo:
 
         # Reinicia a câmera
         self.camera = Camera(LARGURA_MAPA)
+
+        # Reinicia o SCORE
+        self.inimigos_derrotados = 0
+        self.score = 0
+
+        # Reinicia o tempo
+        self.tempo_inicio = pygame.time.get_ticks()
 
 
     def loop_jogo(self):
@@ -79,6 +97,9 @@ class Jogo:
             # ATUALIZAÇÃO
             resultado = self.atualizacao.atualizar()
 
+            if resultado == "continuar":
+                continue
+
             if resultado is not None:
                 return resultado
 
@@ -89,15 +110,15 @@ class Jogo:
 
         return "menu"
 
+
     def desenhar_jogo(self):
 
         self.desenho.desenhar()
-                
+
+
     def verificar_porta(self):
 
-        if not self.player.get_rect().colliderect(
-            self.mapa.porta.rect
-        ):
+        if not self.player.get_rect().colliderect(self.mapa.porta.rect):
             self.mensagem_porta = False
             return None
 
@@ -107,19 +128,25 @@ class Jogo:
 
         self.mensagem_porta = False
 
-        tela_fase = FaseConcluida(
-            self.tela,
-            self.clock
-        )
+        # Calcula o tempo final da fase
+        tempo_final = (pygame.time.get_ticks() - self.tempo_inicio) // 1000
+
+        # Abre a tela de fase concluída
+        tela_fase = FaseConcluida(self.tela, self.clock, self.inimigos_derrotados, tempo_final, self.score)
 
         resultado = tela_fase.executar()
+
+        if resultado == "tentar":
+            self.reiniciar_jogo()
+            return "continuar"
 
         if resultado == "proxima":
             self.reiniciar_jogo()
             return "menu"
 
         return resultado
-    
+
+
     def verificar_game_over(self):
 
         if self.player.vida > 0:
@@ -134,7 +161,8 @@ class Jogo:
             return "continuar"
 
         return resultado
-    
+
+
     def tratar_eventos(self):
 
         for evento in pygame.event.get():
@@ -155,6 +183,7 @@ class Jogo:
                         self.projeteis.adicionar(projetil)
 
         return None
+
 
     def iniciar(self):
 

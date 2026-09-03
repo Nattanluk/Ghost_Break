@@ -3,11 +3,16 @@ import pygame
 
 class FaseConcluida:
 
-    def __init__(self, tela, clock):
+    def __init__(self, tela, clock, inimigos_derrotados, tempo_final, score):
 
         self.tela = tela
         self.clock = clock
         self.fonte = pygame.font.SysFont("Arial",24)
+        self.fonte_informacoes = pygame.font.SysFont("Trebuchet MS",18,bold=True)
+        # Informações da fase
+        self.inimigos_derrotados = inimigos_derrotados
+        self.tempo_final = tempo_final
+        self.score = score
 
         largura, altura = self.tela.get_size()
 
@@ -30,6 +35,7 @@ class FaseConcluida:
         # Botão MENU
         self.botao_menu = pygame.Rect(160,370,largura_botao,altura_botao)
 
+
     def desenhar_botao(self, rect, texto):
 
         mouse = pygame.mouse.get_pos()
@@ -42,64 +48,58 @@ class FaseConcluida:
             cor = (0, 0, 0, 170)
 
         # EXATAMENTE A MESMA SUPERFÍCIE
-        superficie = pygame.Surface(
-            (rect.width, rect.height),
-            pygame.SRCALPHA
-        )
+        superficie = pygame.Surface((rect.width,rect.height),pygame.SRCALPHA)
 
         # EXATAMENTE O MESMO RETÂNGULO
-        pygame.draw.rect(
-            superficie,
-            cor,
-            superficie.get_rect(),
-            border_radius=15
-        )
+        pygame.draw.rect(superficie,cor,superficie.get_rect(),border_radius=15)
 
         # EXATAMENTE A MESMA BORDA
-        pygame.draw.rect(
-            superficie,
-            (255, 255, 255),
-            superficie.get_rect(),
-            2,
-            border_radius=15
-        )
+        pygame.draw.rect(superficie,(255,255,255),superficie.get_rect(),2,border_radius=15)
 
-        self.tela.blit(
-            superficie,
-            rect.topleft
-        )
+        self.tela.blit(superficie,rect.topleft)
 
         # EXATAMENTE A MESMA FONTE DOS BOTÕES DO MENU
-        texto_render = self.fonte.render(
-            texto,
-            True,
-            (255, 255, 255)
-        )
+        texto_render = self.fonte.render(texto,True,(255,255,255))
 
-        texto_rect = texto_render.get_rect(
-            center=rect.center
-        )
+        texto_rect = texto_render.get_rect(center=rect.center)
 
-        self.tela.blit(
-            texto_render,
-            texto_rect
-        )
+        self.tela.blit(texto_render,texto_rect)
+
+
+    def desenhar_informacoes(self):
+
+        # Converte o tempo para minutos e segundos
+        minutos = self.tempo_final // 60
+        segundos = self.tempo_final % 60
+
+        # Inimigos derrotados
+        texto_inimigos = self.fonte_informacoes.render(f"Inimigos derrotados: {self.inimigos_derrotados}",True,(255,255,255))
+
+        # Tempo
+        texto_tempo = self.fonte_informacoes.render(f"Tempo: {minutos:02d}:{segundos:02d}",True,(255,255,255))
+
+        # Score
+        texto_score = self.fonte_informacoes.render(f"Score: {self.score}",True,(255,255,255))
+
+        # Mostra as informações
+        self.tela.blit(texto_inimigos,texto_inimigos.get_rect(center=(410,210)))
+        self.tela.blit(texto_tempo,texto_tempo.get_rect(center=(410,250)))
+        self.tela.blit(texto_score,texto_score.get_rect(center=(410,290)))
+
 
     def executar(self):
 
         while True:
 
             # FUNDO
-            self.tela.blit(
-                self.fundo,
-                (0, 0)
-            )
-           
+            self.tela.blit(self.fundo,(0,0))
+
+            # INFORMAÇÕES
+            self.desenhar_informacoes()
+
             # BOTÕES
             self.desenhar_botao(self.botao_tentar,"REFAZER")
-
             self.desenhar_botao(self.botao_proximo,"PRÓXIMO")
-
             self.desenhar_botao(self.botao_menu,"MENU")
 
 
@@ -110,6 +110,7 @@ class FaseConcluida:
                     return "sair"
 
                 if evento.type == pygame.MOUSEBUTTONDOWN:
+
                     if self.botao_tentar.collidepoint(evento.pos):
                         return "tentar"
 
