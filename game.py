@@ -1,4 +1,3 @@
-#game.py
 import pygame
 
 from Sistemas.desenho_jogo import DesenhoJogo
@@ -24,7 +23,8 @@ class Jogo:
         pygame.display.set_caption("Ghost_Break")
 
         self.clock = pygame.time.Clock()
-        self.player = Saulo(100, 350)
+        self.player = Saulo(*POSICAO_JOGADOR)
+
         self.mensagem_porta = False
         self.mapa = Mapa()
         self.camera = Camera(LARGURA_MAPA)
@@ -50,14 +50,12 @@ class Jogo:
     def reiniciar_jogo(self):
 
         # Cria um novo jogador
-        # A vida e os atributos voltam aos valores iniciais
-        self.player = Saulo(100, 350)
+        self.player = Saulo(*POSICAO_JOGADOR)
 
         # Remove os projéteis antigos
         self.projeteis = GerenciadorProjeteis()
 
         # Cria o mapa novamente
-        # A chave, plasmas, inimigos etc. voltam às posições iniciais
         self.mapa = Mapa()
 
         # Reinicia a câmera
@@ -77,7 +75,7 @@ class Jogo:
 
         while rodando:
 
-            self.clock.tick(60)
+            self.clock.tick(FPS)
 
             # EVENTOS
             resultado = self.tratar_eventos()
@@ -129,10 +127,18 @@ class Jogo:
         self.mensagem_porta = False
 
         # Calcula o tempo final da fase
-        tempo_final = (pygame.time.get_ticks() - self.tempo_inicio) // 1000
+        tempo_final = (
+            pygame.time.get_ticks() - self.tempo_inicio
+        ) // 1000
 
         # Abre a tela de fase concluída
-        tela_fase = FaseConcluida(self.tela, self.clock, self.inimigos_derrotados, tempo_final, self.score)
+        tela_fase = FaseConcluida(
+            self.tela,
+            self.clock,
+            self.inimigos_derrotados,
+            tempo_final,
+            self.score
+        )
 
         resultado = tela_fase.executar()
 
@@ -167,20 +173,31 @@ class Jogo:
 
         for evento in pygame.event.get():
 
+            # Fechar janela
             if evento.type == pygame.QUIT:
                 return "sair"
 
             if evento.type == pygame.KEYDOWN:
 
-                if evento.key == pygame.K_UP:
+                # Pular
+                if evento.key in TECLA_PULAR:
                     self.player.pular()
 
-                if evento.key == pygame.K_s:
+                # Atacar
+                if evento.key == TECLA_ATACAR:
 
                     projetil = self.player.atirar()
 
                     if projetil is not None:
                         self.projeteis.adicionar(projetil)
+
+                # Reiniciar fase
+                if evento.key == TECLA_REINICIAR:
+                    self.reiniciar_jogo()
+
+                # Sair
+                if evento.key == TECLA_SAIR:
+                    return "sair"
 
         return None
 

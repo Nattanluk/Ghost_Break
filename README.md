@@ -211,7 +211,6 @@ Ao perder todas as vidas, a fase é reiniciada.
 |----------------------|
 | S | Ataque com plasma |
 | R | Reiniciar fase |
-| ESC | Sair do jogo |
 
 -----------------------------------------------
 

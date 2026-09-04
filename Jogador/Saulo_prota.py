@@ -1,12 +1,11 @@
-#Saulo_prota.py
+# Saulo_prota.py
+
 import pygame
 import math
 
 from Jogador.personagem import Personagem
 from Combate.projetil import Projetil
-
-
-LARGURA_MAPA = 3000
+from configuracoes import LARGURA_MAPA, TECLA_ESQUERDA, TECLA_DIREITA
 
 
 class Saulo(Personagem):
@@ -14,12 +13,8 @@ class Saulo(Personagem):
     def __init__(self, x, y, esquerda=False):
 
         super().__init__(x, y)
-        
-        self.sprite = pygame.image.load(
-            "imagens/Saulinho.png"
-        ).convert_alpha()
 
-        # Sprite
+        # SPRITES
         self.sprite = pygame.image.load(
             "imagens/Saulinho.png"
         ).convert_alpha()
@@ -27,7 +22,7 @@ class Saulo(Personagem):
         self.sprite_dano = pygame.image.load(
             "imagens/Saulinho_Dano.png"
         ).convert_alpha()
-        
+
         # Saulo normal
         self.sprite_direita = pygame.transform.scale(
             self.sprite,
@@ -39,7 +34,6 @@ class Saulo(Personagem):
             True,
             False
         )
-
 
         # Saulo recebendo dano
         self.sprite_dano_direita = pygame.transform.scale(
@@ -55,39 +49,41 @@ class Saulo(Personagem):
 
         self.esquerda = esquerda
 
-        # Vida
+        # VIDA
         self.vida = 3
         self.invulneravel = False
         self.tempo_invulnerabilidade = 0
 
-        # Movimento
+        # MOVIMENTO
         self.velocidade = 5
         self.direcao = 1
 
-        # Física
+        # FÍSICA
         self.vel_y = 0
         self.gravidade = 0.5
         self.forca_pulo = -10
         self.no_chao = True
 
-        # Estado
+        # ESTADO
         self.tem_chave = False
         self.plasmas = 0
 
-        # Flutuação
+        # FLUTUAÇÃO
         self.tempo_flutuar = 0
         self.velocidade_flutuar = 0.05
         self.amplitude_flutuar = 3
 
+
     def mover_horizontal(self, teclas):
 
-        if teclas[pygame.K_LEFT]:
+        # Esquerda: ← ou A
+        if teclas[TECLA_ESQUERDA[0]] or teclas[TECLA_ESQUERDA[1]]:
             self.pos_x -= self.velocidade
             self.direcao = -1
             self.esquerda = True
-            
 
-        if teclas[pygame.K_RIGHT]:
+        # Direita: → ou D
+        if teclas[TECLA_DIREITA[0]] or teclas[TECLA_DIREITA[1]]:
             self.pos_x += self.velocidade
             self.direcao = 1
             self.esquerda = False
@@ -99,15 +95,17 @@ class Saulo(Personagem):
         if self.pos_x + self.largura > LARGURA_MAPA:
             self.pos_x = LARGURA_MAPA - self.largura
 
+
     def pular(self):
 
         if self.no_chao:
             self.vel_y = self.forca_pulo
             self.no_chao = False
 
+
     def aplicar_gravidade(self, plataformas):
 
-        # Guarda a posição antes de aplicar a gravidade
+        # Guarda a posição antes da gravidade
         pos_y_anterior = self.pos_y
 
         # Aplica a gravidade
@@ -128,7 +126,8 @@ class Saulo(Personagem):
             fundo_anterior = pos_y_anterior + self.altura
             fundo_atual = self.pos_y + self.altura
 
-            # Verifica se Saulo atravessou o topo da plataforma
+            # Verifica se Saulo atravessou o topo
+            # da plataforma
             if (
                 direita_saulo > plataforma.rect_colisao.left
                 and esquerda_saulo < plataforma.rect_colisao.right
@@ -136,24 +135,30 @@ class Saulo(Personagem):
                 and fundo_atual >= plataforma.rect_colisao.top
                 and self.vel_y >= 0
             ):
-                self.pos_y = plataforma.rect_colisao.top - self.altura
+                self.pos_y = (
+                    plataforma.rect_colisao.top - self.altura
+                )
+
                 self.vel_y = 0
                 self.no_chao = True
                 break
+
 
     def update(self, teclas, plataformas):
 
         self.mover_horizontal(teclas)
         self.aplicar_gravidade(plataformas)
 
+        # Flutuação
         self.tempo_flutuar += self.velocidade_flutuar
+
+        # Invulnerabilidade
         if self.invulneravel:
             self.tempo_invulnerabilidade -= 1
 
         if self.tempo_invulnerabilidade <= 0:
             self.invulneravel = False
-            
-            
+
 
     def desenhar(self, tela, camera_x):
 
@@ -161,8 +166,11 @@ class Saulo(Personagem):
             self.tempo_flutuar
         ) * self.amplitude_flutuar
 
-        pos_y_final = self.pos_y - 13 + deslocamento_y
+        pos_y_final = (
+            self.pos_y - 13 + deslocamento_y
+        )
 
+        # Escolhe o sprite
         if self.invulneravel:
 
             if self.esquerda:
@@ -177,6 +185,7 @@ class Saulo(Personagem):
             else:
                 imagem = self.sprite_direita
 
+        # Desenha Saulo
         tela.blit(
             imagem,
             (
@@ -184,16 +193,17 @@ class Saulo(Personagem):
                 pos_y_final
             )
         )
-            
-            
+
 
     def get_rect(self):
+
         return pygame.Rect(
             self.pos_x,
             self.pos_y,
             self.largura,
             self.altura
         )
+
 
     def atirar(self):
 
@@ -208,8 +218,11 @@ class Saulo(Personagem):
             self.direcao
         )
 
+
     def colidir(self, inimigorect):
+
         rect = self.get_rect()
+
         return rect.colliderect(inimigorect)
 
 
@@ -228,6 +241,7 @@ class BarraVidas:
         self.coracao_vazio = pygame.image.load(
             "imagens/corações_3.png"
         ).convert_alpha()
+
 
     def desenhar(self, tela, player):
 
