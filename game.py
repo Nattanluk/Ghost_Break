@@ -3,7 +3,7 @@ import pygame
 from Sistemas.desenho_jogo import DesenhoJogo
 from Jogador.Saulo_prota import Saulo, BarraVidas
 from Telas.menu import Menu
-from Mundo.mapa import Mapa
+from Mundo.fase_eterna import Mapa
 from Telas.gameover import GameOver
 from Telas.fase_concluida import FaseConcluida
 from Combate.projetil import BarraPlasma, GerenciadorProjeteis
