@@ -26,9 +26,9 @@ class Inimigo:
  
         # ANIMAÇÃO
         self.imagens = [
-            pygame.image.load("imagens/1000326750.png").convert_alpha(),
-            pygame.image.load("imagens/1000326751.png").convert_alpha(),
-            pygame.image.load("imagens/1000326749.png").convert_alpha()
+            pygame.image.load("imagens/inimigo_1.png").convert_alpha(),
+            pygame.image.load("imagens/inimigo_2.png").convert_alpha(),
+            pygame.image.load("imagens/inimigo_3.png").convert_alpha()
         ]
 
         # Ajusta o tamanho das imagens

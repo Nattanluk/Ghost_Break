@@ -17,7 +17,7 @@ class FaseConcluida:
         largura, altura = self.tela.get_size()
 
         # Imagem de fundo
-        self.fundo = pygame.image.load("imagens/1000323927.png").convert()
+        self.fundo = pygame.image.load("imagens/fase_concluida.png").convert()
 
         self.fundo = pygame.transform.scale(
             self.fundo,

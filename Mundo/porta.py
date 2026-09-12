@@ -9,9 +9,7 @@ class Porta:
         self.rect = pygame.Rect(x, y, 50, 80)
 
         # Sprite
-        self.sprite = pygame.image.load(
-            "imagens/porta_pixel_art.png"
-        ).convert_alpha()
+        self.sprite = pygame.image.load("imagens/porta_pixel_art.png").convert_alpha()
 
         self.sprite = pygame.transform.scale(
             self.sprite,

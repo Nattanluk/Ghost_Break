@@ -11,21 +11,12 @@ class Mapa:
 
     def __init__(self):
 
-        # ==========================================
-        # PLATAFORMAS DA FASE ETERNA
-        # ==========================================
-
         # Trechos de chão
-        dados_chao = [
-            (0, 30),
-            (38, 70),
-            (80, 130),
-            (140, 180)
-        ]
+        dados_chao = [(0, 30),(38, 70),(80, 130),(140, 180)]
 
         # Plataformas suspensas
         dados_plataformas = [
-            (300, 305, 130, 50),
+            (250, 320, 130, 50),
             (520, 280, 130, 50),
             (800, 230, 180, 50),
             (1150, 250, 150, 50),
@@ -42,27 +33,11 @@ class Mapa:
             dados_chao
         )
 
-        # ==========================================
-        # PORTA
-        # ==========================================
-
         self.porta = Criar_Porta().criar()
-
-        # ==========================================
-        # CHAVE
-        # ==========================================
 
         self.chave = Criar_Chave().criar()
 
-        # ==========================================
-        # INIMIGOS
-        # ==========================================
-
         self.inimigos = Criar_Inimigos().criar()
-
-        # ==========================================
-        # PLASMAS
-        # ==========================================
 
         self.plasmas = Criar_Plasmas().criar()
 
@@ -79,49 +54,24 @@ class Mapa:
         # Inimigos
         for inimigo in self.inimigos:
 
-            inimigo.desenhar(
-                tela,
-                camera_x
-            )
+            inimigo.desenhar(tela, camera_x)
 
         # Porta
-        self.porta.desenhar(
-            tela,
-            camera_x
-        )
+        self.porta.desenhar(tela, camera_x)
 
         # Chave
-        self.chave.desenhar(
-            tela,
-            camera_x
-        )
+        self.chave.desenhar(tela, camera_x)
 
         # Plasmas
         for plasma in self.plasmas:
 
-            plasma.desenhar(
-                tela,
-                camera_x
-            )
+            plasma.desenhar(tela, camera_x)
 
-    def desenhar_mensagem_porta(
-        self,
-        tela,
-        largura_tela,
-        altura_tela
-    ):
+    def desenhar_mensagem_porta(self, tela, largura_tela, altura_tela):
 
-        fonte = pygame.font.SysFont(
-            "Arial",
-            22,
-            bold=True
-        )
+        fonte = pygame.font.SysFont("Arial", 22, bold=True)
 
-        texto = fonte.render(
-            "Você precisa da chave!",
-            True,
-            (255, 255, 255)
-        )
+        texto = fonte.render("Você precisa da chave!", True, (255, 255, 255))
 
         largura_caixa = texto.get_width() + 40
         altura_caixa = texto.get_height() + 20
@@ -130,31 +80,10 @@ class Mapa:
         y = altura_tela - altura_caixa - 20
 
         # Fundo da caixa
-        pygame.draw.rect(
-            tela,
-            (15, 20, 30),
-            (
-                x,
-                y,
-                largura_caixa,
-                altura_caixa
-            ),
-            border_radius=8
-        )
-
+        pygame.draw.rect(tela,(15, 20, 30), (x, y, largura_caixa, altura_caixa), border_radius=8)
+        
         # Borda
-        pygame.draw.rect(
-            tela,
-            (80, 180, 255),
-            (
-                x,
-                y,
-                largura_caixa,
-                altura_caixa
-            ),
-            2,
-            border_radius=8
-        )
+        pygame.draw.rect(tela,(80, 180, 255), (x, y, largura_caixa, altura_caixa), 2, border_radius=8)
 
         # Texto
         texto_x = x + (
@@ -165,10 +94,4 @@ class Mapa:
             altura_caixa - texto.get_height()
         ) // 2
 
-        tela.blit(
-            texto,
-            (
-                texto_x,
-                texto_y
-            )
-        )
+        tela.blit(texto, (texto_x, texto_y))

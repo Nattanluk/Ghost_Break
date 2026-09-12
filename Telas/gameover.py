@@ -11,7 +11,7 @@ class GameOver:
         largura, altura = self.tela.get_size()
 
         # Imagem de fundo
-        self.fundo = pygame.image.load("imagens/1000323722.png").convert()
+        self.fundo = pygame.image.load("imagens/game_over.png").convert()
 
         self.fundo = pygame.transform.scale(
             self.fundo,
