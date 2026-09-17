@@ -61,7 +61,6 @@ class AtualizacaoJogo:
             if projetil is not None:
                 self.jogo.projeteis.adicionar(projetil)
 
-            print("INIMIGO:", inimigo.x, inimigo.y)
 
 
     def atualizar_plasmas(self):
@@ -77,6 +76,11 @@ class AtualizacaoJogo:
         self.jogo.colisao.projetil_inimigo(
             self.jogo.projeteis,
             self.jogo.mapa.inimigos
+        )
+
+        self.jogo.colisao.projetil_jogador(
+            self.jogo.projeteis,
+            self.jogo.player
         )
 
         self.jogo.colisao.jogador_inimigo(

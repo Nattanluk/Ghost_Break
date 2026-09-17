@@ -3,7 +3,7 @@ import pygame
 from Mundo.plataformas import Criar_Plataforma
 from Mundo.porta import Criar_Porta
 from Mundo.chave import Criar_Chave
-from Combate.inimigo import Criar_Inimigos
+from Combate.inimigo import Inimigo
 from Combate.plasma import Criar_Plasmas
 
 
@@ -37,7 +37,11 @@ class Mapa:
 
         self.chave = Criar_Chave().criar()
 
-        self.inimigos = Criar_Inimigos().criar()
+        self.inimigos = [
+            Inimigo(400, 350),
+            Inimigo(1200, 350),
+            Inimigo(2200, 140)
+        ]
 
         self.plasmas = Criar_Plasmas().criar()
 

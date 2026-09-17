@@ -3,6 +3,7 @@ import pygame
 import sys
 
 from Telas.fase_concluida import FaseConcluida #tirar
+from Telas.selecao_niveis import SelecaoNiveis
 
 
 class Menu:
@@ -255,25 +256,14 @@ class Menu:
                 if evento.type == pygame.MOUSEBUTTONDOWN:
 
                     # JOGAR
-                    if self.botao_play.collidepoint(
-                        evento.pos
-                    ): 
+                    if self.botao_play.collidepoint(evento.pos):
 
-                        self.jogo.reiniciar_jogo()
-                        resultado = self.jogo.loop_jogo()
+                        selecao = SelecaoNiveis(self.jogo)
+                        resultado = selecao.executar()
 
-                        # Se o jogo pediu para fechar
                         if resultado == "sair":
-
                             pygame.quit()
                             sys.exit()
-
-                        if resultado == "proxima":
-                            continue
-
-                        # Se resultado for "menu",
-                        # simplesmente continua o while
-                        # e o menu aparece novamente.
 
                     # CRÉDITOS
                     elif self.botao_creditos.collidepoint(

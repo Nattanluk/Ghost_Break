@@ -138,7 +138,7 @@ class ProjetilInimigo(Projetil):
         imagem = self.frames[self.frame_atual]
 
         # O projétil acompanha a direção do inimigo.
-        if self.direcao < 0:
+        if self.direcao > 0:
 
             imagem = pygame.transform.flip(
                 imagem,

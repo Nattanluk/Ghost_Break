@@ -27,7 +27,7 @@ class Jogo:
         self.clock = pygame.time.Clock()
         self.player = Saulo(*POSICAO_JOGADOR)
 
-        self.fase_atual = 2
+        self.fase_atual = 1
 
         self.mensagem_porta = False
         self.mapa = self.criar_mapa()

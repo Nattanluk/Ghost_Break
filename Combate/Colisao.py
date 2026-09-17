@@ -1,5 +1,6 @@
 #Colisao.py
 from Combate.projetil import ProjetilSaulo
+from Combate.projetil import ProjetilInimigo
 
 class Colisao:
 
@@ -38,7 +39,25 @@ class Colisao:
                         gerenciador.projeteis.remove(projetil)
 
                     break
+    def projetil_jogador(self, gerenciador, jogador):
 
+        for projetil in gerenciador.projeteis[:]:
+
+            if not isinstance(projetil, ProjetilInimigo):
+                continue
+
+            if (
+                not jogador.invulneravel
+                and projetil.get_rect().colliderect(jogador.get_rect())
+            ):
+
+                jogador.vida -= 1
+
+                jogador.invulneravel = True
+                jogador.tempo_invulnerabilidade = 60
+
+                if projetil in gerenciador.projeteis:
+                    gerenciador.projeteis.remove(projetil)
 
     def jogador_inimigo(self, jogador, inimigos):
 

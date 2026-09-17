@@ -47,15 +47,15 @@ class Inimigo:
         self.tempo_animacao = 0
         self.velocidade_animacao = 15
 
-        self.tempo_tiro = 0
-        self.intervalo_tiro = 120
+        self.atirador = None
 
     def atualizar(self, plataformas):
 
         if not self.vivo:
             return
 
-        self.tempo_tiro += 1
+        if self.atirador is not None:
+            self.atirador.atualizar()
 
         # MOVIMENTO HORIZONTAL
         self.x += self.velocidade * self.direcao
@@ -146,28 +146,29 @@ class Inimigo:
 
 
     def atirar(self):
+        if self.atirador is None:
+            return None
 
-        if self.tempo_tiro >= self.intervalo_tiro:
+        return self.atirador.executar(self)
 
-            self.tempo_tiro = 0
+
+class Atirar:
+
+    def __init__(self, intervalo=120):
+        self.tempo = 0
+        self.intervalo = intervalo
+
+    def atualizar(self):
+        self.tempo += 1
+
+    def executar(self, inimigo):
+        if self.tempo >= self.intervalo:
+            self.tempo = 0
 
             return ProjetilInimigo(
-                self.x,
-                self.y + self.altura // 2,
-                self.direcao
+                inimigo.x,
+                inimigo.y + inimigo.altura // 2,
+                inimigo.direcao
             )
 
         return None
-
-
-class Criar_Inimigos:
-
-    def criar(self):
-
-        inimigos = [
-            Inimigo(400, 350),
-            Inimigo(1200, 350),
-            Inimigo(2200, 140)]
-
-        return inimigos
-
