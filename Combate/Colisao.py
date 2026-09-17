@@ -1,4 +1,6 @@
 #Colisao.py
+from Combate.projetil import ProjetilSaulo
+
 class Colisao:
 
     def __init__(self, jogo):
@@ -9,6 +11,9 @@ class Colisao:
     def projetil_inimigo(self, gerenciador, inimigos):
 
         for projetil in gerenciador.projeteis[:]:
+
+            if not isinstance(projetil, ProjetilSaulo):
+                continue
 
             for inimigo in inimigos:
 

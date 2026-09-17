@@ -19,6 +19,7 @@ class Mapa:
         # Os espaços entre os números são buracos.
         dados_chao = [
             (0, 5),       # Começo
+            (8, 25),
             (29, 42),     # Área depois da subida
             (46, 61),     # Corredor
             (65, 82),     # Área central
