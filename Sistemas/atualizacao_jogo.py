@@ -56,6 +56,11 @@ class AtualizacaoJogo:
                 self.jogo.mapa.plataformas
             )
 
+            projetil = inimigo.atirar()
+
+            if projetil is not None:
+                self.jogo.projeteis.adicionar(projetil)
+
 
     def atualizar_plasmas(self):
 

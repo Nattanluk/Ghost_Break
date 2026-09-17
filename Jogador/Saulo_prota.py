@@ -4,7 +4,7 @@ import pygame
 import math
 
 from Jogador.personagem import Personagem
-from Combate.projetil import Projetil
+from Combate.projetil import ProjetilSaulo
 from configuracoes import LARGURA_MAPA, TECLA_ESQUERDA, TECLA_DIREITA
 
 
@@ -212,7 +212,7 @@ class Saulo(Personagem):
 
         self.plasmas -= 3
 
-        return Projetil(
+        return ProjetilSaulo(
             self.pos_x + self.largura // 2,
             self.pos_y + self.altura // 2,
             self.direcao

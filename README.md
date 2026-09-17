@@ -141,22 +141,22 @@ As fases possuem estrutura linear, onde o jogador progride da esquerda para a di
 ## Níveis da masmorra
 
 ### Eterno
-Nível inicial, mais simples e introdutório.
+Nível inicial, mais simples e introdutório. (inimigo comum)
 
 ### Congelante
-Possui áreas que reduzem a velocidade do jogador.
+Possui áreas que reduzem a velocidade do jogador. (inimigo atirador)
 
 ### Escaldante
-Contém lava e bolas de fogo como obstáculos principais.
+Contém lava e bolas de fogo como obstáculos principais. (inimigo teletransportador)
 
 ### Desértico
-Exige coleta de água para manter a velocidade do personagem.
+Exige coleta de água para manter a velocidade do personagem. (inimigo armadilha)
 
 ### Bestial
-Os inimigos passam a perseguir o jogador.
+Os inimigos passam a perseguir o jogador. (inimigo perseguidor) 
 
 ### Carmesim
-Focado em precisão e controle, com áreas compostas por lâminas e superfícies perigosas.
+Focado em precisão e controle, com áreas compostas por lâminas e superfícies perigosas. (inimigo blindado)
 
 --------------------------------------------
 

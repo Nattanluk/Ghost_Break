@@ -1,4 +1,4 @@
-#projetil.py
+# projetil.py
 import pygame
 
 class Projetil:
@@ -7,26 +7,16 @@ class Projetil:
 
         self.x = x
         self.y = y
+
         # Tamanho do ataque
         self.largura = 45
         self.altura = 25
+
         self.velocidade = 5.5
-        self.direcao = direcao     
-        # ANIMAÇÃO
+        self.direcao = direcao
+
+        # Animação
         self.frames = []
-
-        nomes_imagens = [
-            "imagens/projetil_1.png",
-            "imagens/projetil_3.png",
-            "imagens/projetil_2.png"
-        ]
-
-        for nome in nomes_imagens:
-
-            imagem = pygame.image.load(nome).convert_alpha()
-            imagem = pygame.transform.scale(imagem,(self.largura, self.altura))
-            self.frames.append(imagem)
-
         self.frame_atual = 0
         self.tempo_animacao = 0
         self.velocidade_animacao = 5
@@ -49,18 +39,11 @@ class Projetil:
 
         imagem = self.frames[self.frame_atual]
 
-        # As imagens originais devem apontar para a DIREITA.
-        # Se o ataque estiver indo para a esquerda,
-        # espelha a imagem.
-        if self.direcao > 0:
-
-            imagem = pygame.transform.flip(imagem,True,False)
-
         # Posição na tela
         pos_x = int(self.x - camera_x)
         pos_y = int(self.y - (self.altura - 8) / 2)
 
-        tela.blit(imagem,(pos_x, pos_y))
+        tela.blit(imagem, (pos_x, pos_y))
 
     def get_rect(self):
 
@@ -70,8 +53,110 @@ class Projetil:
             self.largura,
             self.altura
         )
-        
-        
+
+
+class ProjetilSaulo(Projetil):
+
+    def __init__(self, x, y, direcao):
+
+        super().__init__(x, y, direcao)
+
+        nomes_imagens = [
+            "imagens/projetil_1.png",
+            "imagens/projetil_3.png",
+            "imagens/projetil_2.png"
+        ]
+
+        for nome in nomes_imagens:
+
+            imagem = pygame.image.load(
+                nome
+            ).convert_alpha()
+
+            imagem = pygame.transform.scale(
+                imagem,
+                (self.largura, self.altura)
+            )
+
+            self.frames.append(imagem)
+
+    def desenhar(self, tela, camera_x):
+
+        imagem = self.frames[self.frame_atual]
+
+        # As imagens originais apontam para a direita.
+        # Se o Saulo estiver atirando para a direita,
+        # espelha a imagem.
+        if self.direcao > 0:
+
+            imagem = pygame.transform.flip(
+                imagem,
+                True,
+                False
+            )
+
+        pos_x = int(self.x - camera_x)
+        pos_y = int(
+            self.y - (self.altura - 8) / 2
+        )
+
+        tela.blit(
+            imagem,
+            (pos_x, pos_y)
+        )
+
+
+class ProjetilInimigo(Projetil):
+
+    def __init__(self, x, y, direcao):
+
+        super().__init__(x, y, direcao)
+
+        # Por enquanto vamos reutilizar as mesmas imagens.
+        # Depois podemos colocar imagens próprias do inimigo.
+        nomes_imagens = [
+            "imagens/projetil_1.png",
+            "imagens/projetil_3.png",
+            "imagens/projetil_2.png"
+        ]
+
+        for nome in nomes_imagens:
+
+            imagem = pygame.image.load(
+                nome
+            ).convert_alpha()
+
+            imagem = pygame.transform.scale(
+                imagem,
+                (self.largura, self.altura)
+            )
+
+            self.frames.append(imagem)
+
+    def desenhar(self, tela, camera_x):
+
+        imagem = self.frames[self.frame_atual]
+
+        # O projétil acompanha a direção do inimigo.
+        if self.direcao < 0:
+
+            imagem = pygame.transform.flip(
+                imagem,
+                True,
+                False
+            )
+
+        pos_x = int(self.x - camera_x)
+        pos_y = int(
+            self.y - (self.altura - 8) / 2
+        )
+
+        tela.blit(
+            imagem,
+            (pos_x, pos_y)
+        )
+
+
 class BarraPlasma:
 
     def __init__(self):
@@ -94,7 +179,6 @@ class BarraPlasma:
             "imagens/plasma_cheio.png"
         ).convert_alpha()
 
-        # Redimensiona as imagens
         self.barra_0 = pygame.transform.scale(
             self.barra_0,
             tamanho_barra
@@ -139,20 +223,25 @@ class BarraPlasma:
             imagem,
             (19, 5)
         )
-        
+
+
+
 class GerenciadorProjeteis:
 
     def __init__(self):
+
         self.projeteis = []
 
     def adicionar(self, projetil):
 
         if projetil is not None:
+
             self.projeteis.append(projetil)
 
     def atualizar(self):
 
         for projetil in self.projeteis:
+
             projetil.mover()
 
     def desenhar(self, tela, camera_x):

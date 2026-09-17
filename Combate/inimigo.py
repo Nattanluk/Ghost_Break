@@ -1,6 +1,8 @@
 # inimigo.py
 import pygame
 
+from Combate.projetil import ProjetilInimigo
+
 class Inimigo:
 
     def __init__(self, x, y):
@@ -19,6 +21,7 @@ class Inimigo:
         self.vel_y = 0
         self.gravidade = 0.5
         self.no_chao = False
+
 
         # Distância máxima que pode andar
         self.distancia_patrulha = 190
@@ -44,10 +47,15 @@ class Inimigo:
         self.tempo_animacao = 0
         self.velocidade_animacao = 15
 
+        self.tempo_tiro = 0
+        self.intervalo_tiro = 120
+
     def atualizar(self, plataformas):
 
         if not self.vivo:
             return
+
+        self.tempo_tiro += 1
 
         # MOVIMENTO HORIZONTAL
         self.x += self.velocidade * self.direcao
@@ -135,6 +143,21 @@ class Inimigo:
 
         if self.vida <= 0:
             self.vivo = False
+
+
+    def atirar(self):
+
+        if self.tempo_tiro >= self.intervalo_tiro:
+
+            self.tempo_tiro = 0
+
+            return ProjetilInimigo(
+                self.x,
+                self.y + self.altura // 2,
+                self.direcao
+            )
+
+        return None
 
 
 class Criar_Inimigos:

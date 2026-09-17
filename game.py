@@ -1,9 +1,11 @@
+#game.py
 import pygame
 
 from Sistemas.desenho_jogo import DesenhoJogo
 from Jogador.Saulo_prota import Saulo, BarraVidas
 from Telas.menu import Menu
-from Mundo.fase_eterna import Mapa
+from Mundo.fase_eterna import Mapa as  MapaEterno
+from Mundo.fase_congelante import Mapa as MapaCongelante
 from Telas.gameover import GameOver
 from Telas.fase_concluida import FaseConcluida
 from Combate.projetil import BarraPlasma, GerenciadorProjeteis
@@ -25,8 +27,10 @@ class Jogo:
         self.clock = pygame.time.Clock()
         self.player = Saulo(*POSICAO_JOGADOR)
 
+        self.fase_atual = 2
+
         self.mensagem_porta = False
-        self.mapa = Mapa()
+        self.mapa = self.criar_mapa()
         self.camera = Camera(LARGURA_MAPA)
         self.projeteis = GerenciadorProjeteis()
 
@@ -46,6 +50,13 @@ class Jogo:
         self.desenho = DesenhoJogo(self)
         self.atualizacao = AtualizacaoJogo(self)
 
+    def criar_mapa(self):
+
+        if self.fase_atual == 1:
+            return MapaEterno()
+
+        if self.fase_atual == 2:
+            return MapaCongelante()
 
     def reiniciar_jogo(self):
 
@@ -56,7 +67,7 @@ class Jogo:
         self.projeteis = GerenciadorProjeteis()
 
         # Cria o mapa novamente
-        self.mapa = Mapa()
+        self.mapa = self.criar_mapa()
 
         # Reinicia a câmera
         self.camera = Camera(LARGURA_MAPA)
@@ -96,6 +107,9 @@ class Jogo:
             resultado = self.atualizacao.atualizar()
 
             if resultado == "continuar":
+                continue
+
+            if resultado == "proxima":
                 continue
 
             if resultado is not None:
@@ -147,8 +161,9 @@ class Jogo:
             return "continuar"
 
         if resultado == "proxima":
+            self.fase_atual += 1
             self.reiniciar_jogo()
-            return "menu"
+            return "continuar"
 
         return resultado
 
@@ -203,7 +218,5 @@ class Jogo:
 
 
     def iniciar(self):
-
         menu = Menu(self)
-
         menu.executar()

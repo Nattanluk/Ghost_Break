@@ -1,4 +1,3 @@
-
 #menu.py
 import pygame
 import sys
@@ -268,6 +267,9 @@ class Menu:
 
                             pygame.quit()
                             sys.exit()
+
+                        if resultado == "proxima":
+                            continue
 
                         # Se resultado for "menu",
                         # simplesmente continua o while
