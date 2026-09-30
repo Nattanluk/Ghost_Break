@@ -28,6 +28,7 @@ class Jogo:
         self.player = Saulo(*POSICAO_JOGADOR)
 
         self.fase_atual = 1
+        self.niveis_desbloqueados = [True, False, False, False, False, False]
 
         self.mensagem_porta = False
         self.mapa = self.criar_mapa()
@@ -155,15 +156,23 @@ class Jogo:
         )
 
         resultado = tela_fase.executar()
+        
+        if self.fase_atual == 1:
+            self.niveis_desbloqueados[1] = True
 
         if resultado == "tentar":
             self.reiniciar_jogo()
             return "continuar"
 
         if resultado == "proxima":
-            self.fase_atual += 1
-            self.reiniciar_jogo()
-            return "continuar"
+
+            if self.fase_atual < 2:
+                self.niveis_desbloqueados[self.fase_atual] = True
+                self.fase_atual += 1
+                self.reiniciar_jogo()
+                return "continuar"
+
+            return "menu"
 
         return resultado
 

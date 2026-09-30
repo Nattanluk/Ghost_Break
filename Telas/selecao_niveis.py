@@ -32,7 +32,7 @@ class SelecaoNiveis:
         self.botao_voltar = pygame.Rect(300, 350, 200, 55)
 
         # NÍVEIS DESBLOQUEADOS
-        self.niveis_desbloqueados = [True, True, False, False, False, False]
+        self.niveis_desbloqueados = self.jogo.niveis_desbloqueados
 
     def desenhar_botao(self, rect, texto, desbloqueado=True):
 
