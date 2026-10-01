@@ -1,10 +1,9 @@
-#game.py
 import pygame
 
 from Sistemas.desenho_jogo import DesenhoJogo
 from Jogador.Saulo_prota import Saulo, BarraVidas
 from Telas.menu import Menu
-from Mundo.fase_eterna import Mapa as  MapaEterno
+from Mundo.fase_eterna import Mapa as MapaEterno
 from Mundo.fase_congelante import Mapa as MapaCongelante
 from Telas.gameover import GameOver
 from Telas.fase_concluida import FaseConcluida
@@ -27,11 +26,22 @@ class Jogo:
         self.clock = pygame.time.Clock()
         self.player = Saulo(*POSICAO_JOGADOR)
 
+        # FASE ATUAL
         self.fase_atual = 1
-        self.niveis_desbloqueados = [True, False, False, False, False, False]
+
+        # 5 fases
+        self.niveis_desbloqueados = [
+            True,
+            False,
+            False,
+            False,
+            False
+        ]
 
         self.mensagem_porta = False
+
         self.mapa = self.criar_mapa()
+
         self.camera = Camera(LARGURA_MAPA)
         self.projeteis = GerenciadorProjeteis()
 
@@ -51,6 +61,7 @@ class Jogo:
         self.desenho = DesenhoJogo(self)
         self.atualizacao = AtualizacaoJogo(self)
 
+
     def criar_mapa(self):
 
         if self.fase_atual == 1:
@@ -58,6 +69,20 @@ class Jogo:
 
         if self.fase_atual == 2:
             return MapaCongelante()
+
+        # Temporariamente:
+        # fases 3, 4 e 5 usam o mapa congelante.
+        if self.fase_atual == 3:
+            return MapaCongelante()
+
+        if self.fase_atual == 4:
+            return MapaCongelante()
+
+        if self.fase_atual == 5:
+            return MapaCongelante()
+
+        return MapaEterno()
+
 
     def reiniciar_jogo(self):
 
@@ -72,6 +97,9 @@ class Jogo:
 
         # Reinicia a câmera
         self.camera = Camera(LARGURA_MAPA)
+
+        # Reinicia a mensagem
+        self.mensagem_porta = False
 
         # Reinicia o SCORE
         self.inimigos_derrotados = 0
@@ -131,11 +159,15 @@ class Jogo:
 
     def verificar_porta(self):
 
-        if not self.player.get_rect().colliderect(self.mapa.porta.rect):
+        if not self.player.get_rect().colliderect(
+            self.mapa.porta.rect
+        ):
+
             self.mensagem_porta = False
             return None
 
         if not self.player.tem_chave:
+
             self.mensagem_porta = True
             return None
 
@@ -156,22 +188,30 @@ class Jogo:
         )
 
         resultado = tela_fase.executar()
-        
-        if self.fase_atual == 1:
-            self.niveis_desbloqueados[1] = True
+
+        # Desbloqueia a próxima fase
+        if self.fase_atual < 5:
+
+            self.niveis_desbloqueados[
+                self.fase_atual
+            ] = True
 
         if resultado == "tentar":
+
             self.reiniciar_jogo()
             return "continuar"
 
         if resultado == "proxima":
 
-            if self.fase_atual < 2:
-                self.niveis_desbloqueados[self.fase_atual] = True
+            if self.fase_atual < 5:
+
                 self.fase_atual += 1
+
                 self.reiniciar_jogo()
+
                 return "continuar"
 
+            # Terminou a fase 5
             return "menu"
 
         return resultado
@@ -187,6 +227,7 @@ class Jogo:
         resultado = gameover.executar()
 
         if resultado == "jogar":
+
             self.reiniciar_jogo()
             return "continuar"
 
@@ -227,5 +268,6 @@ class Jogo:
 
 
     def iniciar(self):
+
         menu = Menu(self)
         menu.executar()

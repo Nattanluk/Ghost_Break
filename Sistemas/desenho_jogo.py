@@ -1,4 +1,5 @@
 # desenho_jogo.py
+
 import pygame
 
 from configuracoes import *
@@ -18,15 +19,8 @@ class DesenhoJogo:
             bold=True
         )
 
-        # Fundo
-        self.fundo = pygame.image.load(
-            "imagens/fundo_nivel1.png"
-        ).convert()
-
-        self.fundo = pygame.transform.scale(
-            self.fundo,
-            (LARGURA, ALTURA)
-        )
+        # Fundos das fases
+        self.fundos = {}
 
 
     def desenhar(self):
@@ -46,8 +40,27 @@ class DesenhoJogo:
 
     def desenhar_fundo(self):
 
+        numero_fase = self.jogo.fase_atual
+
+        # Se o fundo ainda não foi carregado,
+        # carrega o fundo da fase atual.
+        if numero_fase not in self.fundos:
+
+            caminho = (
+                f"imagens/fundo_nivel{numero_fase}.png"
+            )
+
+            self.fundos[numero_fase] = pygame.image.load(
+                caminho
+            ).convert()
+
+            self.fundos[numero_fase] = pygame.transform.scale(
+                self.fundos[numero_fase],
+                (LARGURA, ALTURA)
+            )
+
         self.tela.blit(
-            self.fundo,
+            self.fundos[numero_fase],
             (0, 0)
         )
 
