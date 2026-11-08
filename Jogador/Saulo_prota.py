@@ -94,6 +94,11 @@ class Saulo(Personagem):
 
         if self.pos_x + self.largura > LARGURA_MAPA:
             self.pos_x = LARGURA_MAPA - self.largura
+            
+        print(
+    "D:", teclas[pygame.K_d],
+    "SETA:", teclas[pygame.K_RIGHT]
+)
 
 
     def pular(self):
