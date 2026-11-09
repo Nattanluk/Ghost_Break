@@ -3,8 +3,8 @@ import pygame
 from Sistemas.desenho_jogo import DesenhoJogo
 from Jogador.Saulo_prota import Saulo, BarraVidas
 from Telas.menu import Menu
-from Mundo.fase_eterna import Mapa as MapaEterno
-from Mundo.fase_congelante import Mapa as MapaCongelante
+from Mundo.mapa2 import Mapa2 as MapaEterno
+from Mundo.mapa import Mapa as MapaCongelante
 from Telas.gameover import GameOver
 from Telas.fase_concluida import FaseConcluida
 from Combate.projetil import BarraPlasma, GerenciadorProjeteis
@@ -68,17 +68,6 @@ class Jogo:
             return MapaEterno()
 
         if self.fase_atual == 2:
-            return MapaCongelante()
-
-        # Temporariamente:
-        # fases 3, 4 e 5 usam o mapa congelante.
-        if self.fase_atual == 3:
-            return MapaCongelante()
-
-        if self.fase_atual == 4:
-            return MapaCongelante()
-
-        if self.fase_atual == 5:
             return MapaCongelante()
 
         return MapaEterno()
