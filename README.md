@@ -104,7 +104,8 @@ Ele possui movimentação de plataforma, podendo andar para a esquerda e para a 
 - Gravidade: aplicada durante a movimentação;
 - Ataque: utilização de projéteis de plasma;
 - Invulnerabilidade: temporária após receber dano;
-- Flutuação: pequena animação vertical durante a movimentação.
+- Flutuação: pequena animação vertical durante a movimentação;
+- Pulo com tolerância (coyote time e buffer) e altura variável: soltar a tecla encurta o pulo.
 
 Para atacar, o jogador deve coletar pelo menos 3 plasmas, que são consumidos a cada disparo.
 
@@ -302,9 +303,12 @@ Ghost_Break-main/
 - `Mundo/chave.py` → criação e gerenciamento da chave;
 - `Mundo/porta.py` → criação e gerenciamento do portão de saída;
 - `Mundo/plataformas.py` → criação das plataformas e dos trechos de chão;
+- `Mundo/mapa_base.py` → montagem, desenho e animação comuns aos mapas;
 - `Mundo/mapa.py` → construção do mapa Congelante;
 - `Mundo/mapa2.py` → construção do mapa Eterno;
 - `Sistemas/atualizacao_jogo.py` → atualização dos elementos durante a partida;
+- `Sistemas/efeitos.py` → partículas e brilhos;
+- `Sistemas/recursos.py` → carregamento de imagens com cache;
 - `Sistemas/camera.py` → acompanhamento horizontal do personagem pelo cenário;
 - `Sistemas/desenho_jogo.py` → renderização dos elementos na tela;
 - `Telas/menu.py` → menu principal e tela de créditos;
@@ -364,4 +368,4 @@ Desenvolvedores:
 - Sofia Sabina Azevedo Nóbrega
 - Nataniel M. Lucena dos Santos
 
-\--------------------------------------------
+\--------------------------------------------

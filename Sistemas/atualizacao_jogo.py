@@ -16,15 +16,22 @@ class AtualizacaoJogo:
         self.atualizar_jogador()
         self.verificar_queda()
         self.atualizar_inimigos()
-        self.atualizar_plasmas()
-        self.jogo.projeteis.atualizar()
+        self.atualizar_mapa()
+        self.jogo.projeteis.atualizar(
+            self.jogo.efeitos,
+            self.jogo.mapa.largura
+        )
         self.verificar_colisoes()
+        self.jogo.efeitos.atualizar()
+
+        # Coleta antes de checar a porta (assim, pegar a chave e
+        # alcançar a porta no mesmo instante funciona)
+        self.coletar_itens()
+
         resultado = self.jogo.verificar_porta()
 
         if resultado is not None:
             return resultado
-
-        self.coletar_itens()
 
         self.atualizar_camera()
 
@@ -37,7 +44,9 @@ class AtualizacaoJogo:
 
         self.jogo.player.update(
             teclas,
-            self.jogo.mapa.plataformas
+            self.jogo.mapa.plataformas,
+            self.jogo.mapa.largura,
+            self.jogo.efeitos
         )
 
 
@@ -56,19 +65,19 @@ class AtualizacaoJogo:
                 self.jogo.mapa.plataformas
             )
 
-            projetil = inimigo.atirar()
+            projetil = inimigo.atirar(self.jogo.player)
 
             if projetil is not None:
                 self.jogo.projeteis.adicionar(projetil)
 
 
+    def atualizar_mapa(self):
 
-    def atualizar_plasmas(self):
-
-        for plasma in self.jogo.mapa.plasmas:
-
-            if not plasma.coletado:
-                plasma.atualizar()
+        # Animação dos plasmas, chave e porta
+        self.jogo.mapa.atualizar(
+            self.jogo.player,
+            self.jogo.efeitos
+        )
 
 
     def verificar_colisoes(self):

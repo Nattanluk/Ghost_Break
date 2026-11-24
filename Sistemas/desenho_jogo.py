@@ -1,11 +1,17 @@
 # desenho_jogo.py
 
+import os
+
 import pygame
 
 from configuracoes import *
+from Sistemas.recursos import carregar_imagem, resolver_caminho
 
 
 class DesenhoJogo:
+
+    # O fundo se move mais devagar que o cenário (efeito de profundidade)
+    FATOR_PARALLAX = 0.25
 
     def __init__(self, jogo):
 
@@ -22,8 +28,33 @@ class DesenhoJogo:
         # Fundos das fases
         self.fundos = {}
 
+        self.vinheta = self._criar_vinheta()
+
+
+    def _criar_vinheta(self):
+
+        # Escurece levemente as bordas da tela
+        vinheta = pygame.Surface((LARGURA, ALTURA), pygame.SRCALPHA)
+
+        passos = 26
+
+        for i in range(passos):
+
+            alfa = int(95 * (1 - i / passos) ** 2)
+
+            pygame.draw.rect(
+                vinheta,
+                (0, 0, 10, alfa),
+                (i * 3, i * 3, LARGURA - i * 6, ALTURA - i * 6),
+                3
+            )
+
+        return vinheta
+
 
     def desenhar(self):
+
+        camera = self.jogo.camera.x_desenho
 
         self.desenhar_fundo()
 
@@ -31,45 +62,78 @@ class DesenhoJogo:
 
         self.desenhar_player()
 
+        self.desenhar_projeteis()
+
+        self.jogo.efeitos.desenhar(self.tela, camera)
+
+        self.tela.blit(self.vinheta, (0, 0))
+
         self.desenhar_interface()
 
         self.desenhar_mensagem_porta()
 
-        self.desenhar_projeteis()
+
+    def _carregar_fundo(self, numero_fase):
+
+        caminho = f"imagens/fundo_nivel{numero_fase}.png"
+
+        # Fases 3, 4 e 5 ainda não têm cenário próprio:
+        # reutilizam o fundo da fase 1 (antes o jogo travava aqui).
+        if not os.path.isfile(resolver_caminho(caminho)):
+            caminho = "imagens/fundo_nivel1.png"
+
+        original = carregar_imagem(caminho, alpha=False)
+
+        proporcao = original.get_width() / original.get_height()
+
+        largura = max(LARGURA, int(ALTURA * proporcao))
+
+        normal = pygame.transform.smoothscale(
+            original,
+            (largura, ALTURA)
+        ).convert()
+
+        espelhado = pygame.transform.flip(normal, True, False)
+
+        return normal, espelhado
 
 
     def desenhar_fundo(self):
 
         numero_fase = self.jogo.fase_atual
 
-        # Se o fundo ainda não foi carregado,
-        # carrega o fundo da fase atual.
         if numero_fase not in self.fundos:
+            self.fundos[numero_fase] = self._carregar_fundo(numero_fase)
 
-            caminho = (
-                f"imagens/fundo_nivel{numero_fase}.png"
-            )
+        normal, espelhado = self.fundos[numero_fase]
 
-            self.fundos[numero_fase] = pygame.image.load(
-                caminho
-            ).convert()
+        largura = normal.get_width()
 
-            self.fundos[numero_fase] = pygame.transform.scale(
-                self.fundos[numero_fase],
-                (LARGURA, ALTURA)
-            )
-
-        self.tela.blit(
-            self.fundos[numero_fase],
-            (0, 0)
+        deslocamento = int(
+            self.jogo.camera.x_desenho * self.FATOR_PARALLAX
         )
+
+        indice = deslocamento // largura
+        resto = deslocamento % largura
+
+        x = -resto
+
+        # Telhas alternadas (normal/espelhada) para não aparecer emenda
+        while x < LARGURA:
+
+            imagem = normal if indice % 2 == 0 else espelhado
+
+            self.tela.blit(imagem, (x, 0))
+
+            x += largura
+            indice += 1
 
 
     def desenhar_mapa(self):
 
         self.jogo.mapa.desenhar(
             self.tela,
-            self.jogo.camera.x
+            self.jogo.camera.x_desenho
         )
 
 
@@ -77,7 +141,7 @@ class DesenhoJogo:
 
         self.jogo.player.desenhar(
             self.tela,
-            self.jogo.camera.x
+            self.jogo.camera.x_desenho
         )
 
 
@@ -154,5 +218,5 @@ class DesenhoJogo:
 
         self.jogo.projeteis.desenhar(
             self.tela,
-            self.jogo.camera.x
+            self.jogo.camera.x_desenho
         )

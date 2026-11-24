@@ -2,7 +2,6 @@
 import pygame
 import sys
 
-from Telas.fase_concluida import FaseConcluida #tirar
 from Telas.selecao_niveis import SelecaoNiveis
 
 
@@ -19,8 +18,6 @@ class Menu:
         self.fonte_creditos = pygame.font.SysFont("Arial",24)
 
         self.fonte_destaque = pygame.font.SysFont("Arial",28,bold=True)
-
-        self.menu = FaseConcluida
 
         largura, altura = self.tela.get_size()
 
@@ -142,9 +139,9 @@ class Menu:
 
                 ("Nataniel M. Lucena dos Santos", "normal", 285),
 
-                ("Professor: Max Miller", "normal", 355),
+                ("Professor: Max Miller", "normal", 340),
 
-                ("IFRN • Informática • 2º Ano 2M", "normal", 400),
+                ("IFRN • Informática • 2º Ano 2M", "normal", 378),
 
             ]
 
@@ -185,7 +182,7 @@ class Menu:
             self.tela.blit(
                 voltar,
                 voltar.get_rect(
-                    center=(400, 530)
+                    center=(400, 425)
                 )
             )
 
@@ -212,20 +209,6 @@ class Menu:
             # Desenha o fundo
             self.tela.blit(
                 self.fundo,
-                (0, 0)
-            )
-
-            sombra = pygame.Surface(
-                (800, 600),
-                pygame.SRCALPHA
-            )
-
-            sombra.fill(
-                (0, 0, 0, 0)
-            )
-
-            self.tela.blit(
-                sombra,
                 (0, 0)
             )
 

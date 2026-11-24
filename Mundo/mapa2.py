@@ -1,94 +1,89 @@
 import pygame
 
-from Mundo.plataformas import Criar_Plataforma
-from Mundo.porta import Criar_Porta
-from Mundo.chave import Criar_Chave
-from Combate.inimigo import Inimigo
-from Combate.plasma import Criar_Plasmas
+from Mundo.mapa_base import MapaBase
 
 
-class Mapa2:
+class Mapa2(MapaBase):
+    """Fase 1 - mapa "Eterno".
+
+    Percurso em cinco trechos (≈ 4560 px, antes eram ~3000):
+      1. Entrada      - chão seguro, primeiro inimigo e primeiros plasmas.
+      2. Escadaria    - degraus de plataformas com plasmas no alto.
+      3. Subida       - degraus até a plataforma da CHAVE.
+      4. Salão        - plataforma larga com inimigo e chão com dois
+                        inimigos (dá para atravessar por cima ou por baixo).
+      5. Saída        - último trecho de chão com o portão.
+    Todos os saltos foram dimensionados para a física do Saulo
+    (pulo ≈ 100 px de altura e ≈ 200 px de alcance).
+    """
+
+    LARGURA = 4560
+    TEMA = 1
 
     def __init__(self):
 
+        self.nome = "Eterno"
+
         dados_chao = [
-            (0, 30),
-            (38, 70),
-            (80, 130),
-            (140, 180)
+            (0, 780),
+            (890, 1700),
+            (1860, 3340),
+            (3490, 4070),
+            (4230, 4560)
         ]
 
         dados_plataformas = [
-            (250, 320, 130, 50),
-            (520, 280, 130, 50),
-            (800, 230, 180, 50),
-            (1150, 250, 150, 50),
-            (1450, 320, 140, 50),
-            (1750, 290, 160, 50),
-            (2000, 200, 440, 50),
-            (2190, 110, 100, 50),
-            (2650, 280, 100, 50)
+            # Trecho 1
+            (470, 340, 130),
+
+            # Trecho 2 - escadaria (o chão continua embaixo, então
+            # descer do último degrau não leva ao abismo)
+            (1010, 340, 110),
+            (1190, 270, 110),
+            (1370, 200, 110),
+
+            # Trecho 3 - subida até a chave
+            (1970, 340, 130),
+            (2170, 270, 130),
+            (2350, 200, 130),
+            (2510, 140, 150),
+
+            # Trecho 4 - salão
+            (2750, 340, 240),
+            (3060, 280, 120),
+
+            # Trecho 5
+            (3620, 330, 120),
+            (3790, 260, 120)
         ]
 
-        self.plataformas = Criar_Plataforma(1).criar(
+        # (x_centro, y_topo da plataforma, intervalo de tiro)
+        # Na fase 1 os inimigos apenas patrulham.
+        inimigos = [
+            (560, 410, None),
+            (1250, 410, None),
+            (2180, 410, None),
+            (2870, 340, None),
+            (3720, 410, None)
+        ]
+
+        # (x_centro, y_base)
+        plasmas = [
+            (230, 410), (300, 410), (370, 410),
+            (535, 340),
+            (1065, 340), (1245, 270), (1425, 200),
+            (1100, 410),
+            (2035, 340), (2235, 270),
+            (2430, 200),
+            (2870, 410), (3120, 280),
+            (3680, 330), (3850, 260)
+        ]
+
+        self.montar(
+            dados_chao,
             dados_plataformas,
-            dados_chao
+            inimigos,
+            plasmas,
+            chave=(2575, 85),
+            porta=(4400, 410)
         )
-
-        self.porta = Criar_Porta().criar()
-        self.chave = Criar_Chave().criar()
-
-        self.inimigos = [
-            Inimigo(400, 350),
-            Inimigo(1200, 350),
-            Inimigo(2200, 140)
-        ]
-
-        self.plasmas = Criar_Plasmas().criar()
-
-    def desenhar(self, tela, camera_x):
-
-        for plataforma in self.plataformas:
-            plataforma.desenhar(tela, camera_x)
-
-        for inimigo in self.inimigos:
-            inimigo.desenhar(tela, camera_x)
-
-        self.porta.desenhar(tela, camera_x)
-        self.chave.desenhar(tela, camera_x)
-
-        for plasma in self.plasmas:
-            plasma.desenhar(tela, camera_x)
-
-    def desenhar_mensagem_porta(self, tela, largura_tela, altura_tela):
-
-        fonte = pygame.font.SysFont("Arial", 22, bold=True)
-
-        texto = fonte.render(
-            "Você precisa da chave!",
-            True,
-            (255, 255, 255)
-        )
-
-        largura_caixa = texto.get_width() + 40
-        altura_caixa = texto.get_height() + 20
-
-        x = (largura_tela - largura_caixa) // 2
-        y = altura_tela - altura_caixa - 20
-
-        pygame.draw.rect(
-            tela, (15, 20, 30),
-            (x, y, largura_caixa, altura_caixa),
-            border_radius=8
-        )
-
-        pygame.draw.rect(
-            tela, (80, 180, 255),
-            (x, y, largura_caixa, altura_caixa),
-            2, border_radius=8
-        )
-
-        texto_x = x + (largura_caixa - texto.get_width()) // 2
-        texto_y = y + (altura_caixa - texto.get_height()) // 2
-
-        tela.blit(texto, (texto_x, texto_y))

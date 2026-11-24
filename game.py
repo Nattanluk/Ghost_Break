@@ -12,6 +12,7 @@ from configuracoes import *
 from Sistemas.camera import Camera
 from Combate.Colisao import Colisao
 from Sistemas.atualizacao_jogo import AtualizacaoJogo
+from Sistemas.efeitos import Efeitos
 
 
 class Jogo:
@@ -42,8 +43,11 @@ class Jogo:
 
         self.mapa = self.criar_mapa()
 
-        self.camera = Camera(LARGURA_MAPA)
+        self.camera = Camera(self.mapa.largura)
         self.projeteis = GerenciadorProjeteis()
+
+        # Efeitos visuais (partículas)
+        self.efeitos = Efeitos(LARGURA, ALTURA)
 
         # Sistema de colisão
         self.colisao = Colisao(self)
@@ -84,8 +88,11 @@ class Jogo:
         # Cria o mapa novamente
         self.mapa = self.criar_mapa()
 
-        # Reinicia a câmera
-        self.camera = Camera(LARGURA_MAPA)
+        # Reinicia a câmera (cada mapa tem a sua própria largura)
+        self.camera = Camera(self.mapa.largura)
+
+        # Remove partículas antigas
+        self.efeitos = Efeitos(LARGURA, ALTURA)
 
         # Reinicia a mensagem
         self.mensagem_porta = False
@@ -245,6 +252,12 @@ class Jogo:
                     if projetil is not None:
                         self.projeteis.adicionar(projetil)
 
+                        self.efeitos.faiscas(
+                            projetil.x,
+                            projetil.y,
+                            8
+                        )
+
                 # Reiniciar fase
                 if evento.key == TECLA_REINICIAR:
                     self.reiniciar_jogo()
@@ -253,10 +266,16 @@ class Jogo:
                 if evento.key == TECLA_SAIR:
                     return "sair"
 
+            if evento.type == pygame.KEYUP:
+
+                # Soltar o pulo cedo = pulo curto
+                if evento.key in TECLA_PULAR:
+                    self.player.soltar_pulo()
+
         return None
 
 
     def iniciar(self):
 
         menu = Menu(self)
-        menu.executar()
+        menu.executar()

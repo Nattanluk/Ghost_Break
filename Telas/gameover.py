@@ -117,4 +117,4 @@ class GameOver:
                         return "menu"
 
             pygame.display.flip()
-            self.jogo.clock.tick(60)
+            self.jogo.clock.tick(60)
